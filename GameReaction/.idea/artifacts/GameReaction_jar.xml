@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GameReaction:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/GameReaction_jar</output-path>
+    <root id="archive" name="GameReaction.jar">
+      <element id="module-output" name="GameReaction" />
+    </root>
+  </artifact>
+</component>
