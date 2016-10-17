@@ -6,11 +6,12 @@ import java.util.ArrayList;
  * Created by Artem Solomatin on 14.10.16.
  */
 public class Player {
+    public final int agressionFactor = 1;
     public int id;
     public int territory;
     public int army;
     public int freeArmy = 70 - 3*territory;
-    public ArrayList<Cell> terr = new ArrayList<>();
+    public Cell[] terr = new Cell[100];
     public String color;
 
     public Player(int num){
@@ -49,8 +50,13 @@ public class Player {
 
     public void setArmy() {
         army = 0;
-        for(Cell cell : terr){
-            army += cell.cellArmy;
+        int i;
+        for(i = 0;i < 100;i++) {
+            if (terr[i] != null) {
+                army += terr[i].cellArmy;
+            }/*else{
+                GUI.information.setText("Попытка перейти по нулевой ссылке в Player.setArmy()");
+            }*/
         }
     }
 

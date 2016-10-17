@@ -69,6 +69,7 @@ public class Cell extends Button {
     }
 
     public void setCellArmy(int army) {
+        GUI.players.get(owner - 1).setArmy();
         this.cellArmy += army;
     }
 

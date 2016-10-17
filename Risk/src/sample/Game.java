@@ -8,11 +8,12 @@ public class Game {
     public static int currentPlayer = 1;
     public static boolean gameOver;
     public static int winner;
+    //public static int num;
 
     public static void nextStep(){
         if(phase < 2){
             phase++;
-            System.out.println(GUI.pl1.getArmy() + GUI.pl1.getFreeArmy());
+            //System.out.println(GUI.pl1.getArmy() + GUI.pl1.getFreeArmy());
         }else{            //начнем новый ход
             phase = 0;
             if(currentPlayer == 4){
@@ -76,6 +77,7 @@ public class Game {
                 ComputerBehavior.play1(2, currentPlayer);
             }
         }
+        //GUI.information.setText(GUI.allTerr.get(num).getCellArmy() + " " + GUI.allTerr.get(xNum + 10 * yNum).getCellArmy());
     }
 
     public static void play0(int xNum, int yNum) {
@@ -122,14 +124,16 @@ public class Game {
     }
 
     public static void move(int xNum, int yNum, int number, int phase) {
-        int atArmy = GUI.players.get(GUI.allTerr.get(xNum + 10 * yNum).getOwner() - 1).getArmy();
-        int defArmy =  GUI.players.get(GUI.allTerr.get(number).getOwner() - 1).getArmy();
+        //int atArmy = GUI.players.get(GUI.allTerr.get(xNum + 10 * yNum).getOwner() - 1).getArmy();
+        //int defArmy =  GUI.players.get(GUI.allTerr.get(number).getOwner() - 1).getArmy();
         Cell attackerCell = GUI.allTerr.get(xNum + 10 * yNum);
+        //System.out.println(number);
         Cell defenderCell = GUI.allTerr.get(number);
 
         if (phase == 1) {                        //АТАКА
+            //System.out.println("Фаза 2 начало " + defenderCell.getCellArmy());
             if (attackerCell.getOwner() != defenderCell.getOwner()) {
-                if(attackerCell.getCellArmy() > 0) {
+                if(attackerCell.getCellArmy() > 1) {
                     //ПРОЦЕСС АТАКИ(борьба, проверка на захват)
                     int attackCount = 0;   //Для ничьей
                     while ((attackerCell.getCellArmy() > 0) && (defenderCell.getCellArmy() > 0)
@@ -139,43 +143,64 @@ public class Game {
                                 * defenderCell.getCellArmy()));
                         defenderCell.setCellArmy((int) Math.round(-0.1 * (Math.random() * 7 + 1)           //атака нападающих
                                 * attackerCell.getCellArmy()));
+                    }
                         if (defenderCell.getCellArmy() <= 0) {  //победа нападающего
+                            /*System.out.println("atArmy " + atArmy + "defArmy" + defArmy);
+                            System.out.println("at ostalos" + GUI.players.get(attackerCell.getOwner() - 1).getArmy() + "def ostalos" + GUI.players.get(defenderCell.getOwner() - 1).getArmy());
+                            System.out.println((atArmy - GUI.players.get(attackerCell.getOwner() - 1).getArmy()) + "" + (defArmy - GUI.players.get(defenderCell.getOwner() - 1).getArmy()));
                             GUI.information.setText("Игрок " + attackerCell.getOwner() + " победил, " +
                                     "потеряв " + (atArmy - GUI.players.get(attackerCell.getOwner() - 1).getArmy())
                                     + " отрядов.\nИгрок " + defenderCell.getOwner() + " потерял " +
-                                    (defArmy - GUI.players.get(defenderCell.getOwner() - 1).getArmy()) + " отрядов");
+                                    (defArmy - GUI.players.get(defenderCell.getOwner() - 1).getArmy()) + " отрядов");*/
+
+                            //установим армию
+                            defenderCell.cellArmy = attackerCell.getCellArmy() - 1;
+                            GUI.players.get(attackerCell.getOwner() - 1).setArmy();
+
+
+                            //GUI.information.setText(defenderCell.getCellArmy() + " " + attackerCell.getCellArmy());
 
                             //Внесем изменения в значения игроков
                             GUI.players.get(attackerCell.getOwner() - 1).setTerritory(1);
                             GUI.players.get(defenderCell.getOwner() - 1).setTerritory(-1);
-                            GUI.players.get(defenderCell.getOwner() - 1).setArmy();
-                            GUI.players.get(attackerCell.getOwner() - 1).setArmy();
+                            GUI.players.get(attackerCell.getOwner() - 1).terr[number] = defenderCell;
+                            GUI.players.get(defenderCell.getOwner() - 1).terr[number] = null;
 
                             //изменим владельца, цвет и армию
                             defenderCell.setOwner(attackerCell.getOwner());
                             defenderCell.setColor(attackerCell.cellColor);
-                            defenderCell.cellArmy = attackerCell.getCellArmy() - 1;
-                            attackerCell.cellArmy = 1;
+                        }
+                            //перепишем армию в любом случае
+                            attackerCell.cellArmy = 1;   //пока что она в любом случае будет равна единице
+                            //GUI.players.get(attackerCell.getOwner() - 1).setArmy();
+                            if(defenderCell.getCellArmy() <= 0){  //если вдруг защищающаяся клетка обнулилась
+                                defenderCell.cellArmy = 1;
+                                //GUI.players.get(defenderCell.getOwner() - 1).setArmy();
+                            }
+                            GUI.players.get(defenderCell.getOwner() - 1).setArmy();//Нужно ли????????????
+                            GUI.players.get(attackerCell.getOwner() - 1).setArmy();//Нужно ли????????????
 
-                            //перепишем текст на ячейках
+                            //перепишем текст на ячейках в любом случае
                             defenderCell.setText("" + defenderCell.getCellArmy());
                             attackerCell.setText("" + attackerCell.getCellArmy());
-                            rewriter();
-                        }
-                    }
                 }else{
                     GUI.information.setText("Недостаточно войск для атаки");
                 }
             } else {
                 GUI.information.setText("В этом режиме нельзя перемещать войска");
             }
+            //System.out.println("Фаза 1 конец " + defenderCell.getCellArmy());
         }
 
         if(phase == 2){                          //ПЕРЕМЕЩЕНИЕ
+            //System.out.println("Фаза 2 " + defenderCell.getCellArmy());
+            //GUI.information.setText(GUI.allTerr.get(number).getCellArmy() + " " + GUI.allTerr.get(xNum + 10 * yNum).getCellArmy());
             if (attackerCell.getOwner() == defenderCell.getOwner()) {
                 if(attackerCell.getCellArmy() > 1) {  //Достаточно ли войск
-                    defenderCell.setCellArmy(1);                   //ПЕРЕДЕЛАТЬ С COMBO BOX
+                    defenderCell.setCellArmy(1);
                     attackerCell.setCellArmy(-1);
+                    //defenderCell.setCellArmy(1);                   //ПЕРЕДЕЛАТЬ С COMBO BOX
+                    //attackerCell.setCellArmy(-1);
                     //перепишем текст на ячейках
                     defenderCell.setText("" + defenderCell.getCellArmy());
                     attackerCell.setText("" + attackerCell.getCellArmy());
@@ -186,5 +211,6 @@ public class Game {
                 GUI.information.setText("В этом режиме нельзя атаковать");
             }
         }
+        rewriter();
     }
 }
