@@ -84,17 +84,26 @@ public class Client extends Application {
     }
 
     private void setUpNetworking() {
-        try {
             scan = new Scanner(System.in);
             System.out.println("Введите IP для подключения к серверу.");
             System.out.println("Формат: xxx.xxx.xxx.xxx");
 
             ip = scan.nextLine();
-
-            sock = new Socket(ip, Constants.Port);
-            InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
-            reader = new BufferedReader(streamReader);
-            writer = new PrintWriter(sock.getOutputStream());
+            try {
+                sock = new Socket(ip, Constants.Port);
+            }catch(IOException e) {
+                System.out.println("Enable to create a socket");
+            }
+            try {
+                reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            }catch(IOException e){
+                System.out.println("Enable to read from socket");
+            }
+            try {
+                writer = new PrintWriter(sock.getOutputStream());
+            }catch(IOException e){
+                System.out.println("Enable to write to socket");
+            }
             System.out.println("Networking established");
 
             System.out.println("Введите свой ник:");
@@ -102,10 +111,6 @@ public class Client extends Application {
 
             writer.println("SERVER>" + name + " has joined us\n");
             writer.flush();
-        }
-        catch(IOException ex) {
-            System.out.println("Problems with server.\nPlease try later or try to reconnect.");
-        }
     }
 
     class IncomingReader implements Runnable {
