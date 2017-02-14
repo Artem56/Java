@@ -1,0 +1,29 @@
+import javax.swing.*;
+
+/**
+ * Created by Artem Solomatin on 08.02.17.
+ * 2DBubbleShooter
+ */
+
+//разбить GamePanel на GamePanel c графикой и GameLogic с логикой, апдейтами и т.д.
+//сделать наследование JFrame, а не создавать объект JFrame
+//попробовать использовать время не в наносекундах
+    //speed должен зависить от fps, если вдруг я захочу его изменить. Или наоборот
+    //!!! заставить врагов отталкиваться друг от друга
+    //!!! можно сделать режим дуэли. Плющки будут появляться в рандомных метах, немного врагов
+    //!!! плохая система замедления, проходить по всем врагам это долго
+    //!!! после каждого уровня бонус к очкам за время прохождения
+    //закрытие потоков в Saver перенести в finally
+
+public class Game {
+
+    public static void main (String[] args){
+        JFrame window = new JFrame("Bubble Shooter");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setContentPane(new GamePanel());
+        //window.setLocationRelativeTo(null);
+        window.pack();
+        window.setVisible(true);
+
+    }
+}
