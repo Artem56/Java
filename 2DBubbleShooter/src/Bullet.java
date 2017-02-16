@@ -65,5 +65,4 @@ public class Bullet implements Mobile {
         g.fillOval((int)x - radius, (int)y - radius, 2*radius, 2*radius);
 
     }
-
 }

@@ -16,12 +16,13 @@ import javax.swing.*;
     //закрытие потоков в Saver перенести в finally
 
 public class Game {
+    public static GamePanel panel = new GamePanel();
 
     public static void main (String[] args){
         JFrame window = new JFrame("Bubble Shooter");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setContentPane(new GamePanel());
-        //window.setLocationRelativeTo(null);
+        window.setContentPane(panel);
+
         window.pack();
         window.setVisible(true);
 

@@ -106,7 +106,7 @@ public class Enemy implements Mobile, Wounded {
                 newEnemy.y = this.y;
 
                 newEnemy.radians = Math.toRadians(Math.random() * 360);
-                GamePanel.enemies.add(newEnemy);
+                GameLogic.enemies.add(newEnemy);
             }
 
         }

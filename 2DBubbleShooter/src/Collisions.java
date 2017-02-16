@@ -5,68 +5,68 @@
 public abstract class Collisions {
 
     public static void playerPowerCollision(){
-        double px = GamePanel.player.getX();
-        double py = GamePanel.player.getY();
-        int pr = GamePanel.player.getRadius();
-        for(int i = 0;i < GamePanel.powerUps.size();i++){
-            double ux = GamePanel.powerUps.get(i).getX();
-            double uy = GamePanel.powerUps.get(i).getY();
-            int ur = GamePanel.powerUps.get(i).getRadius();
+        double px = GameLogic.player.getX();
+        double py = GameLogic.player.getY();
+        int pr = GameLogic.player.getRadius();
+        for(int i = 0;i < GameLogic.powerUps.size();i++){
+            double ux = GameLogic.powerUps.get(i).getX();
+            double uy = GameLogic.powerUps.get(i).getY();
+            int ur = GameLogic.powerUps.get(i).getRadius();
 
             double distance = Math.sqrt((ux - px)*(ux - px) + (uy - py)*(uy - py));
             if(distance <= ur + pr){
-                int type = GamePanel.powerUps.get(i).getType();
+                int type = GameLogic.powerUps.get(i).getType();
 
                 switch (type){
-                    case 1 : GamePanel.player.addLive();
-                        GamePanel.texts.add(new Text(ux, uy, "+1 life"));
+                    case 1 : GameLogic.player.addLive();
+                        GameLogic.texts.add(new Text(ux, uy, "+1 life"));
                         break;
-                    case 2 : GamePanel.player.increasePower(1);
-                        GamePanel.texts.add(new Text(ux, uy, "Power"));
+                    case 2 : GameLogic.player.increasePower(1);
+                        GameLogic.texts.add(new Text(ux, uy, "Power"));
                         break;
-                    case 3 : GamePanel.slowDownTimer = System.nanoTime();    //ns
-                        for(int j = 0;j < GamePanel.enemies.size();j++){
-                            GamePanel.enemies.get(j).setSlow(true);
+                    case 3 : GameLogic.slowDownTimer = System.nanoTime();    //ns
+                        for(int j = 0;j < GameLogic.enemies.size();j++){
+                            GameLogic.enemies.get(j).setSlow(true);
                         }
-                        GamePanel.texts.add(new Text(ux, uy, "Slow down"));
+                        GameLogic.texts.add(new Text(ux, uy, "Slow down"));
                         break;
-                    case 4 : GamePanel.player.addScore(5 * Levels.waveNumber);
-                        GamePanel.texts.add(new Text(ux, uy, "Extra points"));
+                    case 4 : GameLogic.player.addScore(5 * Levels.waveNumber);
+                        GameLogic.texts.add(new Text(ux, uy, "Extra points"));
                         break;
-                    case 5 : GamePanel.player.increasePower(2);
-                        GamePanel.texts.add(new Text(ux, uy, "Extra power"));
+                    case 5 : GameLogic.player.increasePower(2);
+                        GameLogic.texts.add(new Text(ux, uy, "Extra power"));
                         break;
                 }
 
-                GamePanel.powerUps.remove(i);
+                GameLogic.powerUps.remove(i);
                 i--;
             }
         }
     }
 
     public static void playerEnemyCollision(){
-        if(!GamePanel.player.isHitting()){
-            double px = GamePanel.player.getX();
-            double py = GamePanel.player.getY();
-            int pr = GamePanel.player.getRadius();
-            for(int i = 0;i < GamePanel.enemies.size();i++){
-                double ex = GamePanel.enemies.get(i).getX();
-                double ey = GamePanel.enemies.get(i).getY();
-                int er = GamePanel.enemies.get(i).getRadius();
+        if(!GameLogic.player.isHitting()){
+            double px = GameLogic.player.getX();
+            double py = GameLogic.player.getY();
+            int pr = GameLogic.player.getRadius();
+            for(int i = 0;i < GameLogic.enemies.size();i++){
+                double ex = GameLogic.enemies.get(i).getX();
+                double ey = GameLogic.enemies.get(i).getY();
+                int er = GameLogic.enemies.get(i).getRadius();
 
                 double distance = Math.sqrt((px - ex)*(px - ex) + (py - ey)*(py - ey));
                 if(distance <= pr + er){
-                    GamePanel.player.hit();
+                    GameLogic.player.hit();
                 }
             }
         }
     }
 
     public static void bulletEnemyCollision(){
-        for(int i = 0;i < GamePanel.bullets.size();i++){
-            for(int j = 0;j < GamePanel.enemies.size();j++){
-                Bullet b = GamePanel.bullets.get(i);
-                Enemy e = GamePanel.enemies.get(j);
+        for(int i = 0;i < GameLogic.bullets.size();i++){
+            for(int j = 0;j < GameLogic.enemies.size();j++){
+                Bullet b = GameLogic.bullets.get(i);
+                Enemy e = GameLogic.enemies.get(j);
 
                 double bx = b.getX();
                 double by = b.getY();
@@ -79,7 +79,7 @@ public abstract class Collisions {
                 double distance = Math.sqrt((bx - ex)*(bx - ex) + (by - ey)*(by - ey));
                 if(distance <= br + er){        //collision
                     e.hit();
-                    GamePanel.bullets.remove(i);
+                    GameLogic.bullets.remove(i);
                     i--;
                     break;
                 }

@@ -91,8 +91,8 @@ public class Saver implements Serializable {
         g.setColor(Color.black);
         g.drawString("Name " + "               " + "Score\n", GamePanel.WIDTH - 580, GamePanel.HEIGHT - 570 );
 
-        for(int i = 0;i < 10 && i < GamePanel.profiles.size();i++) {
-                Saver pr = GamePanel.profiles.get(i);
+        for(int i = 0;i < 10 && i < GameLogic.profiles.size();i++) {
+                Saver pr = GameLogic.profiles.get(i);
                 g.drawString("" + pr.getName(), GamePanel.WIDTH - 580, GamePanel.HEIGHT - 520 + i * 50);
                 g.drawString("" + pr.getScore() + "\n", GamePanel.WIDTH - 380, GamePanel.HEIGHT - 520 + i * 50);
         }

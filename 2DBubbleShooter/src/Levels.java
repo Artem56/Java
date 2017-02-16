@@ -10,129 +10,129 @@ public abstract class Levels {
     public static void createNewWave(){
     if(waveNumber == 1){   //25
         for(int i = 0;i<5 ;i++){
-            GamePanel.enemies.add(new Enemy(1, 1));
-            GamePanel.enemies.add(new Enemy(1, 2));
+            GameLogic.enemies.add(new Enemy(1, 1));
+            GameLogic.enemies.add(new Enemy(1, 2));
         }
     }
 
         if(waveNumber == 2){    //50
         for(int i = 0;i<4;i++){
-            GamePanel.enemies.add(new Enemy(3, 1));
+            GameLogic.enemies.add(new Enemy(3, 1));
         }
         for(int i = 0;i<3;i++){
-            GamePanel.enemies.add(new Enemy(1, 3));
+            GameLogic.enemies.add(new Enemy(1, 3));
         }
-            GamePanel.enemies.add(new Enemy(2, 3));
+            GameLogic.enemies.add(new Enemy(2, 3));
     }
 
         if(waveNumber == 3){    //100
         for(int i = 0;i<5;i++){
-            GamePanel.enemies.add(new Enemy(4, 1));
+            GameLogic.enemies.add(new Enemy(4, 1));
         }
         for(int i = 0;i<5;i++){
-            GamePanel.enemies.add(new Enemy(2, 2));
+            GameLogic.enemies.add(new Enemy(2, 2));
         }
     }
 
         if(waveNumber == 4){    //150
         for(int i = 0;i<8;i++){
-            GamePanel.enemies.add(new Enemy(1, 4));
+            GameLogic.enemies.add(new Enemy(1, 4));
         }
         for(int i = 0;i<5;i++){
-            GamePanel.enemies.add(new Enemy(2, 3));
+            GameLogic.enemies.add(new Enemy(2, 3));
         }
         for(int i = 0;i<5;i++){
-            GamePanel.enemies.add(new Enemy(4, 2));
+            GameLogic.enemies.add(new Enemy(4, 2));
         }
     }
 
         if(waveNumber == 5){   //240
         for(int i = 0;i<2;i++){
-            GamePanel.enemies.add(new Enemy(5, 3));
+            GameLogic.enemies.add(new Enemy(5, 3));
         }
         for(int i = 0;i<6;i++){
-            GamePanel.enemies.add(new Enemy(10, 1));
+            GameLogic.enemies.add(new Enemy(10, 1));
         }
     }
 
         if(waveNumber == 6){     //320
         for(int i = 0;i<3;i++){
-            GamePanel.enemies.add(new Enemy(5, 3));
+            GameLogic.enemies.add(new Enemy(5, 3));
         }
         for(int i = 0;i<5;i++){
-            GamePanel.enemies.add(new Enemy(1, 3));
+            GameLogic.enemies.add(new Enemy(1, 3));
         }
         for(int i = 0;i<11;i++){
-            GamePanel.enemies.add(new Enemy(2, 3));
+            GameLogic.enemies.add(new Enemy(2, 3));
         }
         for(int i = 0;i<18;i++){
-            GamePanel.enemies.add(new Enemy(2, 4));
+            GameLogic.enemies.add(new Enemy(2, 4));
         }
     }
 
         if(waveNumber == 7){   //450
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(1, 4));
+            GameLogic.enemies.add(new Enemy(1, 4));
         }
         for(int i = 0;i<6;i++){
-            GamePanel.enemies.add(new Enemy(3, 3));
+            GameLogic.enemies.add(new Enemy(3, 3));
         }
         for(int i = 0;i<4;i++){
-            GamePanel.enemies.add(new Enemy(4, 1));
+            GameLogic.enemies.add(new Enemy(4, 1));
         }
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(5, 2));
+            GameLogic.enemies.add(new Enemy(5, 2));
         }
     }
 
         if(waveNumber == 8){   //600
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(3, 4));
+            GameLogic.enemies.add(new Enemy(3, 4));
         }
         for(int i = 0;i<14;i++){
-            GamePanel.enemies.add(new Enemy(4, 3));
+            GameLogic.enemies.add(new Enemy(4, 3));
         }
         for(int i = 0;i<2;i++){
-            GamePanel.enemies.add(new Enemy(5, 2));
+            GameLogic.enemies.add(new Enemy(5, 2));
         }
-            GamePanel.enemies.add(new Enemy(5, 1));
+            GameLogic.enemies.add(new Enemy(5, 1));
     }
 
         if(waveNumber == 9){   //725
         for(int i = 0;i<23;i++){
-            GamePanel.enemies.add(new Enemy(4, 4));
+            GameLogic.enemies.add(new Enemy(4, 4));
         }
         for(int i = 0;i<7;i++){
-            GamePanel.enemies.add(new Enemy(2, 2));
+            GameLogic.enemies.add(new Enemy(2, 2));
         }
     }
 
         if(waveNumber == 10){   //1000
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(10, 4));
+            GameLogic.enemies.add(new Enemy(10, 4));
         }
     }
 
         if(waveNumber == 11){   //1500
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(1, 4));
+            GameLogic.enemies.add(new Enemy(1, 4));
         }
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(2, 4));
+            GameLogic.enemies.add(new Enemy(2, 4));
         }
         for(int i = 0;i<20;i++){
-            GamePanel.enemies.add(new Enemy(3, 4));
+            GameLogic.enemies.add(new Enemy(3, 4));
         }
         for(int i = 0;i<17;i++){
-            GamePanel.enemies.add(new Enemy(4, 4));
+            GameLogic.enemies.add(new Enemy(4, 4));
         }
         for(int i = 0;i<10;i++){
-            GamePanel.enemies.add(new Enemy(5, 4));
+            GameLogic.enemies.add(new Enemy(5, 4));
         }
     }
 
         if(waveNumber == 12){   //вместо этого сделать бесконечную волну
-            GamePanel.setRunning(false);
+            GameLogic.setRunning(false);
     }
 
 }

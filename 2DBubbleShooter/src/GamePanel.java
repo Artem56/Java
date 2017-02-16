@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by Artem Solomatin on 08.02.17.
@@ -18,31 +15,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public final static int WIDTH = 600;
     public final static int HEIGHT = 600;
     private Thread thread;   //для запуска игры
-    private static boolean running;
 
     private BufferedImage image;
-    private Graphics2D g;
-    private final int FPS = 30;
-    private double averageFPS;
-
-    private long waveStartTimer;      //ns
-    private long waveStartTimerDiff;  //ms
-    private boolean waveStart;
-    private final int waveDelay = 3000;
-    public static long slowDownTimer;
-    private long slowDownTimerDiff;
-    private final int slowDownLength = 5000;  //ms
-    private long gameStartTime;      //ms
-
-
-    public static Player player;
-    public static ArrayList<Bullet> bullets = new ArrayList<>();
-    public static ArrayList<Enemy> enemies = new ArrayList<>();
-    public static ArrayList<PowerUp> powerUps = new ArrayList<>();
-    public static ArrayList<Explosion> explosions = new ArrayList<>();
-    public static ArrayList<Text> texts = new ArrayList<>();
-    public static ArrayList<Saver> profiles = new ArrayList<>();
-    private boolean paused;
+    public static Graphics2D g;
+    private static boolean paused;
 
     //CONSTRUCTOR
     public GamePanel(){
@@ -53,11 +29,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
 
     //FUNCTIONS
-    public static void setRunning(boolean b){
-        running = b;
-    }
 
-    public void addNotify(){   // метод вызывается тогда, когда GamePanel добавляется в родительский компонент с помощью add()
+    public void addNotify(){   // метод вызывается тогда, когда GamePanel добавляется в родительский компонент с помощью add() и заканчивает создаваться
         super.addNotify();
 
         if(thread == null){
@@ -70,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     @Override
     public void run(){
-        running = true;
+        GameLogic.running = true;
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
         g = (Graphics2D) image.getGraphics();     //в переменную g мы записали ссылку на контекст отображения для изображения image
         g.setRenderingHint(                       //сглаживание
@@ -82,54 +55,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON
         );
 
-
-
-        long startTime;                //ns
-        long loopTime;                  //ms
-        long waitTime;                 //ms
-        long totalTime = 0;            //ms
-        long targetTime = 1000/FPS;    //ms
-
-        int frameCount = 0;
-        final int maxFrameCount = 30;
-
-        player = new Player();
-        gameStartTime = System.currentTimeMillis();
-
-        /*for(int i = 0;i < 200;i++){            //МОЖНО ИСПОЛЬЗОВАТЬ ДЛЯ БЕСКОНЕЧНОЙ ВОЛНЫ, ПРОСТО ВЫПУСКАТЬ ВРАГОВ С ЗАДЕРЖКОЙ
-            enemies.add(new Enemy(1, 1));
-        }*/
-        //waves
-
-        //GAME LOOP
-        while(running){
-
-            startTime = System.nanoTime();
-
-            gameUpdate();        //update all of the game logic
-            gameRender();        //draws the game on a back buffer
-            gameDraw();          //put the buffer on the screen
-
-            loopTime = (System.nanoTime() - startTime) / 1000_000;
-            waitTime = (targetTime - loopTime);
-            try{
-                if(waitTime > 0) {     //время первого прохода огромное
-                    Thread.sleep(waitTime);
-                }
-            } catch (InterruptedException e) {
-                System.out.println("ERROR in loop, the thread can't sleep");
-                e.printStackTrace();
-            }
-
-            totalTime += (System.nanoTime() - startTime)/1000_000;
-            frameCount++;
-            if(frameCount == maxFrameCount){
-                averageFPS = 1000/(totalTime/frameCount);
-
-                frameCount = 0;
-                totalTime = 0;
-            }
-        }
+        GameLogic.gameLoop();
 
         g.setColor(new Color(100, 50, 200));     //game over
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -138,170 +64,42 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         String s = "G A M E   O V E R";
         int length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
         g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 80);
-        s = "Final Score: " + player.getScore();
+        s = "Final Score: " + GameLogic.player.getScore();
         length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
         g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 40);
-        s = "Time: " + ((System.currentTimeMillis() - gameStartTime) / 1000) + "seconds";
+        s = "Time: " + ((System.currentTimeMillis() - GameLogic.gameStartTime) / 1000) + "seconds";
         length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
         g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2);
 
         gameDraw();
 
-        //сохранение
-        profiles = Saver.deserData();
+        GameLogic.saveResult();
 
-        String name = JOptionPane.showInputDialog(null, "Введите ваше имя\n" +
-                "для сохранения результата");
-        Saver profile = new Saver(name, player.getScore());
 
-        //проверка на одинаковые имена
-        profiles.add(profile);
-        for(int i = 0;i < profiles.size();i++){
-            Saver pr = profiles.get(i);
-            if (profile.getName().equals(pr.getName())) {
-                if (profile.getScore() > pr.getScore()) {
-                    profiles.remove(pr);
-                    i = profiles.size();
-                }else{
-                    profiles.remove(profile);
-                    i = profiles.size();
-                }
-            }
-        }
-        System.out.println(profiles.size());
-        if(profiles.size() == 0){
-            System.out.println("kek1");
-            profiles.add(profile);
-        }
-
-        Collections.sort(GamePanel.profiles, new Comparator<Saver>() {
-            public int compare(Saver o1, Saver o2) {
-                return o2.getScore() - o1.getScore();
-            }
-        });
-
-        Saver.serData(profiles);
-
-        Saver.draw(g);
         gameDraw();
     }
 
-    private void gameUpdate(){
+    public void gameUpdate(){
         if(paused) return;
-        //new wave
-        if(waveStartTimer == 0 && enemies.size() == 0){
-            Levels.waveNumber++;
-            waveStartTimer = System.nanoTime();
-        }else{     //если волна уже идет
-            waveStartTimerDiff = (System.nanoTime() - waveStartTimer) / 1000_000;
-            if(waveStartTimerDiff > waveDelay){
-                waveStart = true;
-                waveStartTimer = 0;
-                waveStartTimerDiff = 0;
-            }
-        }
 
-        //create wave
-        if(waveStart && enemies.size() == 0){
-            Levels.createNewWave();
-        }
+        GameLogic.wave();
 
-        player.update();
+        GameLogic.mobileUpdate();
 
-        //bullets update
-        for(int i = 0; i < bullets.size(); i++) {
-            boolean remove = bullets.get(i).update();
-            if(remove) {
-                bullets.remove(i);
-                i--;
-            }
-        }
-
-        //enemies update
-        for(int i = 0;i < enemies.size();i++){
-            enemies.get(i).update();
-        }
-
-        //powerUp update
-        for(int i = 0;i < powerUps.size();i++){
-            boolean remove = powerUps.get(i).update();
-            if(remove){
-                powerUps.remove(i);
-                i--;
-            }
-        }
-
-        //explosion update
-        for(int i = 0;i < explosions.size();i++){
-            boolean remove = explosions.get(i).update();
-            if(remove){
-                explosions.remove(i);
-                i--;
-            }
-        }
-
-        //text update
-        for(int i = 0;i < texts.size();i++){
-            boolean remove = texts.get(i).update();
-            if(remove){
-                texts.remove(i);
-                i--;
-            }
-        }
         Collisions.bulletEnemyCollision();
 
         Collisions.playerEnemyCollision();
 
         Collisions.playerPowerCollision();
 
-        //dead enemies
-        for(int j = 0;j < enemies.size();j++){
-            if(enemies.get(j).isDead()){
-                Enemy dead = enemies.get(j);
+        GameLogic.deadUpdate();
 
-                //power up
-                double random = Math.random();
-                if(random < 0.01){          //шанс 1 к 100, всего в 1 из 3 что-то выпадает
-                    powerUps.add(new PowerUp(1, dead.getX(), dead.getY()));
-                }else if(random < 0.1){
-                    powerUps.add(new PowerUp(2, dead.getX(), dead.getY()));
-                }else if(random < 0.02){
-                    powerUps.add(new PowerUp(3, dead.getX(), dead.getY()));
-                }else if(random < 0.15){
-                    powerUps.add(new PowerUp(4, dead.getX(), dead.getY()));
-                }else if(random < 0.05){
-                    powerUps.add(new PowerUp(5, dead.getX(), dead.getY()));
-                }
-
-                player.addScore(dead.getCost());
-                enemies.remove(j);
-                j--;
-
-                dead.explode();
-                explosions.add(new Explosion(dead.getX(), dead.getY(), dead.getRadius(), dead.getCost() * 4 + 10));
-            }
-        }
-
-        //is player dead?
-        if(player.isDead()){
-            running = false;
-        }
-
-        //slowdown update
-        if(slowDownTimer != 0){
-            slowDownTimerDiff = (System.nanoTime() - slowDownTimer) / 1000_000;     //ms
-        }
-        if(slowDownTimerDiff > slowDownLength){
-            slowDownTimer = 0;
-            for(int j = 0;j < enemies.size();j++){
-                enemies.get(j).setSlow(false);
-            }
-        }
+        GameLogic.slowDownUpdate();
     }
 
-    private void gameRender() {
+    public void gameRender() {
         //background
-        if(slowDownTimer == 0) {
+        if(GameLogic.slowDownTimer == 0) {
             g.setColor(new Color(0, 100, 255));
             g.fillRect(0, 0, WIDTH, HEIGHT);
         }
@@ -313,7 +111,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
 
         //slow background
-        if(slowDownTimer != 0){
+        if(GameLogic.slowDownTimer != 0){
             g.setColor(new Color(155, 155, 255, 64));
             g.fillRect(0, 0, WIDTH, HEIGHT);
         }
@@ -330,32 +128,32 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         */
 
         //player
-        player.draw(g);
+        GameLogic.player.draw(g);
 
         int i;
         //bullets
-        for (i = 0; i < bullets.size(); i++) {
-            bullets.get(i).draw(g);
+        for (i = 0; i < GameLogic.bullets.size(); i++) {
+            GameLogic.bullets.get(i).draw(g);
         }
 
         //enemies
-        for (i = 0; i < enemies.size(); i++) {
-            enemies.get(i).draw(g);
+        for (i = 0; i < GameLogic.enemies.size(); i++) {
+            GameLogic.enemies.get(i).draw(g);
         }
 
         //powerUp
-        for (i = 0; i < powerUps.size(); i++) {
-            powerUps.get(i).draw(g);
+        for (i = 0; i < GameLogic.powerUps.size(); i++) {
+            GameLogic.powerUps.get(i).draw(g);
         }
 
         //explosions
-        for (i = 0; i < explosions.size(); i++) {
-            explosions.get(i).draw(g);
+        for (i = 0; i < GameLogic.explosions.size(); i++) {
+            GameLogic.explosions.get(i).draw(g);
         }
 
         //texts
-        for (i = 0; i < texts.size(); i++) {
-            texts.get(i).draw(g);
+        for (i = 0; i < GameLogic.texts.size(); i++) {
+            GameLogic.texts.get(i).draw(g);
         }
 
         //wave number
@@ -368,28 +166,28 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         //g.drawString(" " + slowDownTimer / 1000_000, 100, 50);
         g.setFont(new Font("Areal", Font.BOLD, 32));
         int length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
-        int transparancy = (int) (Math.sin(Math.PI * waveStartTimerDiff / waveDelay) * 255);
+        int transparancy = (int) (Math.sin(Math.PI * GameLogic.waveStartTimerDiff / GameLogic.waveDelay) * 255);
         g.setColor(new Color(255, 255, 255, transparancy));
         g.drawString(s, WIDTH / 2 - length / 2, HEIGHT / 2);
 
         //player lives
-        for (i = 0; i < player.getLives(); i++) {
+        for (i = 0; i < GameLogic.player.getLives(); i++) {
             g.setColor(Color.white);
-            g.fillOval(10 + 30 * i, 20, player.getRadius() * 3, player.getRadius() * 3);
+            g.fillOval(10 + 30 * i, 20, GameLogic.player.getRadius() * 3, GameLogic.player.getRadius() * 3);
             g.setStroke(new BasicStroke(3));           //граница
             g.setColor(Color.gray);
-            g.drawOval(10 + 30 * i, 20, 3 * player.getRadius(), 3 * player.getRadius());
+            g.drawOval(10 + 30 * i, 20, 3 * GameLogic.player.getRadius(), 3 * GameLogic.player.getRadius());
         }
 
         //score
         g.setColor(Color.white);
         g.setFont(new Font("Areal", Font.PLAIN, 18));
-        g.drawString("Score: " + player.getScore(), WIDTH - 180, 30);
+        g.drawString("Score: " + GameLogic.player.getScore(), WIDTH - 180, 30);
 
         //power
         g.setColor(Color.yellow);
-        g.fillRect(20, 40, player.getPower() * 10, 10);
-        for (i = 0; i < player.getRequiredPower(); i++) {
+        g.fillRect(20, 40, GameLogic.player.getPower() * 10, 10);
+        for (i = 0; i < GameLogic.player.getRequiredPower(); i++) {
             g.setStroke(new BasicStroke(2));
             g.setColor(Color.yellow.darker());
             g.drawRect(20 + 10 * i, 40, 10, 10);
@@ -398,11 +196,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
 
         //slowdown meter
-        if(slowDownTimer != 0){
+        if(GameLogic.slowDownTimer != 0){
             g.setColor(Color.white);
             g.drawRect(20, 60, 100, 10);
             g.fillRect(20, 60,
-                    (int)(100 - 100 * slowDownTimerDiff / slowDownLength), 10);
+                    (int)(100 - 100 * GameLogic.slowDownTimerDiff / GameLogic.slowDownLength), 10);
         }
 
         //paused
@@ -415,7 +213,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
-    private void gameDraw(){
+    public void gameDraw(){
         Graphics g2 = this.getGraphics();           //рисует настоящий игровой экран
         g2.drawImage(image, 0, 0, null);
     }
@@ -430,15 +228,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     @Override
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : player.setLeft(true);
+            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(true);
                 break;
-            case KeyEvent.VK_RIGHT : player.setRight(true);
+            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(true);
                 break;
-            case KeyEvent.VK_UP : player.setUp(true);
+            case KeyEvent.VK_UP : GameLogic.player.setUp(true);
                 break;
-            case KeyEvent.VK_DOWN : player.setDown(true);
+            case KeyEvent.VK_DOWN : GameLogic.player.setDown(true);
                 break;
-            case KeyEvent.VK_SPACE : player.setFiring(true);
+            case KeyEvent.VK_SPACE : GameLogic.player.setFiring(true);
                 break;
         }
     }
@@ -446,15 +244,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : player.setLeft(false);
+            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(false);
                 break;
-            case KeyEvent.VK_RIGHT : player.setRight(false);
+            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(false);
                 break;
-            case KeyEvent.VK_UP : player.setUp(false);
+            case KeyEvent.VK_UP : GameLogic.player.setUp(false);
                 break;
-            case KeyEvent.VK_DOWN : player.setDown(false);
+            case KeyEvent.VK_DOWN : GameLogic.player.setDown(false);
                 break;
-            case KeyEvent.VK_SPACE : player.setFiring(false);
+            case KeyEvent.VK_SPACE : GameLogic.player.setFiring(false);
                 break;
             case KeyEvent.VK_Q : setPaused();
                 break;

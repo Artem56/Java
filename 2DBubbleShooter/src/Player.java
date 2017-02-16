@@ -166,35 +166,35 @@ public class Player implements Mobile, Wounded {
             if(elapsed > firingDelay){
                 firingTimer = System.nanoTime();
                 if(powerLevel < 2){
-                    GamePanel.bullets.add(new Bullet(270, x, y));
+                    GameLogic.bullets.add(new Bullet(270, x, y));
                 }else if(powerLevel < 3){
-                    GamePanel.bullets.add(new Bullet(270, x + 5, y));
-                    GamePanel.bullets.add(new Bullet(270, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(270, x - 5, y));
                 }
                 else if(powerLevel < 4){
-                    GamePanel.bullets.add(new Bullet(265, x - 5, y));
-                    GamePanel.bullets.add(new Bullet(270, x, y));
-                    GamePanel.bullets.add(new Bullet(275, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, x, y));
+                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
                 }else if(powerLevel < 5){
-                    GamePanel.bullets.add(new Bullet(265, x - 5, y));
-                    GamePanel.bullets.add(new Bullet(265, x - 10, y));
-                    GamePanel.bullets.add(new Bullet(270, x, y));
-                    GamePanel.bullets.add(new Bullet(275, x + 5, y));
-                    GamePanel.bullets.add(new Bullet(275, x + 10, y));
+                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(265, x - 10, y));
+                    GameLogic.bullets.add(new Bullet(270, x, y));
+                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(275, x + 10, y));
                 }else if (powerLevel < 6) {
-                    GamePanel.bullets.add(new Bullet(270, 5, x + 5, y));
-                    GamePanel.bullets.add(new Bullet(270, 5, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, 5, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(270, 5, x - 5, y));
                 } else {
-                    GamePanel.bullets.add(new Bullet(265, x - 5, y));
-                    GamePanel.bullets.add(new Bullet(270, x, y));
-                    GamePanel.bullets.add(new Bullet(275, x + 5, y));
-                    GamePanel.bullets.add(new Bullet(315, x, y));
-                    GamePanel.bullets.add(new Bullet(0, x, y));
-                    GamePanel.bullets.add(new Bullet(45, x, y));
-                    GamePanel.bullets.add(new Bullet(90, x, y));
-                    GamePanel.bullets.add(new Bullet(135, x, y));
-                    GamePanel.bullets.add(new Bullet(180, x, y));
-                    GamePanel.bullets.add(new Bullet(225, x, y));
+                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, x, y));
+                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(315, x, y));
+                    GameLogic.bullets.add(new Bullet(0, x, y));
+                    GameLogic.bullets.add(new Bullet(45, x, y));
+                    GameLogic.bullets.add(new Bullet(90, x, y));
+                    GameLogic.bullets.add(new Bullet(135, x, y));
+                    GameLogic.bullets.add(new Bullet(180, x, y));
+                    GameLogic.bullets.add(new Bullet(225, x, y));
 
                 }
 
