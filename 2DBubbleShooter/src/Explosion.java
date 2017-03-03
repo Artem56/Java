@@ -37,15 +37,12 @@ public class Explosion implements Mobile {
 
     public boolean update(){
         radius += speed;
-        if(radius >= maxRadius) {
-            return true;
-        }
-        return false;
+        return radius >= maxRadius;
     }
 
     public void draw(Graphics2D g){
         g.setColor(new Color(255, 255, 255, 150));
-        g.setStroke(new BasicStroke(3));
+        g.setStroke(new BasicStroke(2));
         g.drawOval((int) (x - radius), (int) (y - radius), 2 * radius, 2 * radius);
         g.setStroke(new BasicStroke(1));
     }

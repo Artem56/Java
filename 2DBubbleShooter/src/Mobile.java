@@ -5,13 +5,13 @@ import java.awt.*;
  * 2DBubbleShooter
  */
 public interface Mobile {
-    public double getX();
+    double getX();
 
-    public double getY();
+    double getY();
 
-    public int getRadius();
+    int getRadius();
 
-    public boolean update();
+    boolean update();
 
-    public void draw(Graphics2D g);
+    void draw(Graphics2D g);
 }

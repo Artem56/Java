@@ -30,7 +30,7 @@ public abstract class Collisions {
                         }
                         GameLogic.texts.add(new Text(ux, uy, "Slow down"));
                         break;
-                    case 4 : GameLogic.player.addScore(5 * Levels.waveNumber);
+                    case 4 : GameLogic.player.addScore(10 * Levels.getWaveNumber());
                         GameLogic.texts.add(new Text(ux, uy, "Extra points"));
                         break;
                     case 5 : GameLogic.player.increasePower(2);
@@ -56,7 +56,7 @@ public abstract class Collisions {
 
                 double distance = Math.sqrt((px - ex)*(px - ex) + (py - ey)*(py - ey));
                 if(distance <= pr + er){
-                    GameLogic.player.hit();
+                    GameLogic.player.hit(0);
                 }
             }
         }
@@ -78,7 +78,7 @@ public abstract class Collisions {
 
                 double distance = Math.sqrt((bx - ex)*(bx - ex) + (by - ey)*(by - ey));
                 if(distance <= br + er){        //collision
-                    e.hit();
+                    e.hit(b.getRadius());
                     GameLogic.bullets.remove(i);
                     i--;
                     break;

@@ -20,7 +20,6 @@ public class PowerUp {
     //5 -- 2 * power for weapon
     private Color color;
 
-
     //CONSTRUCTOR
 
     public PowerUp(int type, double x, double y){
@@ -64,10 +63,7 @@ public class PowerUp {
     public boolean update(){     //если нужно удалить (при выходе за экран например), то вернуть true
         y += speed;
 
-        if(y > GamePanel.HEIGHT){
-            return true;
-        }
-        return false;
+        return y > GamePanel.getHEIGHT();
     }
 
     public void draw(Graphics2D g){

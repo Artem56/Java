@@ -9,13 +9,12 @@ public class Player implements Mobile, Wounded {
 
     private double x;
     private double y;
-    private final int radius = 5;
+    private final int radius = 7;
 
     private boolean left;
     private boolean right;
     private boolean up;
     private boolean down;
-    private boolean active;
 
     private final int speed = 5;
     private int lives;
@@ -23,9 +22,9 @@ public class Player implements Mobile, Wounded {
     private int power;           //очков
     private int powerLevel;      //когда достаточно очков - апнуть левел
     private int[] requiredPower = {
-            1, 2, 4, 8, 16, 32, 64
+            1, 2, 4, 8, 14, 22, 32, 44, 58, 74, 92
     };
-    private int maxPowerLevel = 6;
+    private int maxPowerLevel = 10;
 
     private boolean hit;          //получил ли урон
     private long recoveryTimer;    //ns
@@ -38,11 +37,15 @@ public class Player implements Mobile, Wounded {
     private final Color colorDefault = Color.WHITE;
     private final Color colorHitted = Color.RED;
 
+    private int mouseX;
+    private int mouseY;
+    private double angle;
+
     //CONSTRUCTOR
 
-    public Player(){
-        x = GamePanel.WIDTH/2;
-        y = GamePanel.HEIGHT/2;
+    public Player() {
+        x = GamePanel.getWIDTH() / 2;
+        y = GamePanel.getHEIGHT() / 2;
 
         lives = 3;
 
@@ -50,7 +53,7 @@ public class Player implements Mobile, Wounded {
     }
 
     //FUNCTIONS
-    public void setFiring(boolean b){
+    public void setFiring(boolean b) {
         firing = b;
     }
 
@@ -90,7 +93,7 @@ public class Player implements Mobile, Wounded {
         this.down = down;
     }
 
-    public boolean isHitting(){
+    public boolean isHitting() {
         return hit;
     }
 
@@ -102,32 +105,50 @@ public class Player implements Mobile, Wounded {
         this.score += score;
     }
 
-    public void addLive(){
-        lives++;
+    public int getMouseX() {
+        return mouseX;
     }
 
-    public void hit(){
+    public void setMouseX(int mouseX) {
+        this.mouseX = mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
+    public void setMouseY(int mouseY) {
+        this.mouseY = mouseY;
+    }
+
+    public void addLive() {
+        if (lives < 10) {
+            lives++;
+        }
+    }
+
+    public void hit(int useless) {
         lives--;
         hit = true;
         recoveryTimer = System.nanoTime();
     }
 
-    public boolean isDead(){
+    public boolean isDead() {
         return lives <= 0;
     }
 
-    public void increasePower(int gain){
+    public void increasePower(int gain) {
         power += gain;
-        if(powerLevel == maxPowerLevel){
-            if(power > requiredPower[powerLevel]){
+        if (powerLevel == maxPowerLevel) {
+            if (power > requiredPower[powerLevel]) {
                 power = requiredPower[powerLevel];
             }
             return;
         }
-        if(power >= requiredPower[powerLevel]){
+        if (power >= requiredPower[powerLevel]) {
             power -= requiredPower[powerLevel];
-            if(powerLevel < maxPowerLevel) {
-                    powerLevel++;
+            if (powerLevel < maxPowerLevel) {
+                powerLevel++;
             }
         }
     }
@@ -140,65 +161,127 @@ public class Player implements Mobile, Wounded {
         return requiredPower[powerLevel];
     }
 
-    public boolean update(){
-        if(left) {
+    public boolean update() {
+        if (left) {
             x -= speed;
         }
-        if(right) {
+        if (right) {
             x += speed;
         }
-        if(up) {
+        if (up) {
             y -= speed;
         }
-        if(down) {
+        if (down) {
             y += speed;
         }
 
         //reflected from the sides
-        if(x < radius) x = radius;
-        if(y < radius) y = radius;
-        if(x > GamePanel.WIDTH - radius) x = GamePanel.WIDTH - radius;
-        if(y > GamePanel.HEIGHT - radius) y = GamePanel.HEIGHT - radius;
+        if (x < radius) x = radius;
+        if (y < radius) y = radius;
+        if (x > GamePanel.getWIDTH() - radius) x = GamePanel.getWIDTH() - radius;
+        if (y > GamePanel.getHEIGHT() - radius) y = GamePanel.getHEIGHT() - radius;
 
         //firing
-        if(firing){
+        if (firing) {
             long elapsed = (System.nanoTime() - firingTimer) / 1000_000;   //ms
-            if(elapsed > firingDelay){
+            if (elapsed > firingDelay) {
+                setDirection();
                 firingTimer = System.nanoTime();
-                if(powerLevel < 2){
+                if (powerLevel < 2) {
                     GameLogic.bullets.add(new Bullet(270, x, y));
-                }else if(powerLevel < 3){
+                } else if (powerLevel < 3) {
                     GameLogic.bullets.add(new Bullet(270, x + 5, y));
                     GameLogic.bullets.add(new Bullet(270, x - 5, y));
-                }
-                else if(powerLevel < 4){
+                } else if (powerLevel < 4) {
                     GameLogic.bullets.add(new Bullet(265, x - 5, y));
                     GameLogic.bullets.add(new Bullet(270, x, y));
                     GameLogic.bullets.add(new Bullet(275, x + 5, y));
-                }else if(powerLevel < 5){
-                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
-                    GameLogic.bullets.add(new Bullet(265, x - 10, y));
+                } else if (powerLevel < 5) {
+                    GameLogic.bullets.add(new Bullet(262, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(266, x - 10, y));
                     GameLogic.bullets.add(new Bullet(270, x, y));
-                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
-                    GameLogic.bullets.add(new Bullet(275, x + 10, y));
-                }else if (powerLevel < 6) {
-                    GameLogic.bullets.add(new Bullet(270, 5, x + 5, y));
-                    GameLogic.bullets.add(new Bullet(270, 5, x - 5, y));
-                } else {
-                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
-                    GameLogic.bullets.add(new Bullet(270, x, y));
-                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
-                    GameLogic.bullets.add(new Bullet(315, x, y));
-                    GameLogic.bullets.add(new Bullet(0, x, y));
-                    GameLogic.bullets.add(new Bullet(45, x, y));
-                    GameLogic.bullets.add(new Bullet(90, x, y));
-                    GameLogic.bullets.add(new Bullet(135, x, y));
-                    GameLogic.bullets.add(new Bullet(180, x, y));
-                    GameLogic.bullets.add(new Bullet(225, x, y));
+                    GameLogic.bullets.add(new Bullet(274, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(278, x + 10, y));
+                } else if (powerLevel < 6) {
+                    GameLogic.bullets.add(new Bullet(270, 4, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x - 5, y));
+                } else if (powerLevel < 7) {
+                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
+                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
+                } else if (powerLevel < 8) {
+                    GameLogic.bullets.add(new Bullet(262, 4, x - 7, y));
+                    GameLogic.bullets.add(new Bullet(266, 4, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
+                    GameLogic.bullets.add(new Bullet(274, 4, x + 7, y));
+                    GameLogic.bullets.add(new Bullet(278, 4, x + 15, y));
+                } else if (powerLevel < 9){
+                    GameLogic.bullets.add(new Bullet(258, 4, x - 6, y));
+                    GameLogic.bullets.add(new Bullet(262, 4, x - 4, y));
+                    GameLogic.bullets.add(new Bullet(266, 4, x - 2, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
+                    GameLogic.bullets.add(new Bullet(274, 4, x + 2, y));
+                    GameLogic.bullets.add(new Bullet(278, 4, x + 4, y));
+                    GameLogic.bullets.add(new Bullet(282, 4, x + 6, y));
+
+                } else if (powerLevel < 10){
+                    GameLogic.bullets.add(new Bullet(258, 6, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(262, 6, x - 10, y));
+                    GameLogic.bullets.add(new Bullet(266, 6, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, 6, x, y));
+                    GameLogic.bullets.add(new Bullet(274, 6, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(278, 6, x + 10, y));
+                    GameLogic.bullets.add(new Bullet(282, 6, x + 15, y));
+
+                } else if (powerLevel < 11){
+                    GameLogic.bullets.add(new Bullet(250, 6, x - 25, y));
+                    GameLogic.bullets.add(new Bullet(254, 6, x - 20, y));
+                    GameLogic.bullets.add(new Bullet(258, 6, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(262, 6, x - 10, y));
+                    GameLogic.bullets.add(new Bullet(266, 6, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(270, 6, x, y));
+                    GameLogic.bullets.add(new Bullet(274, 6, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(278, 6, x + 10, y));
+                    GameLogic.bullets.add(new Bullet(282, 6, x + 15, y));
+                    GameLogic.bullets.add(new Bullet(286, 6, x + 20, y));
+                    GameLogic.bullets.add(new Bullet(290, 6, x + 25, y));
 
                 }
+
+
+                    /*if(powerLevel < 2){          //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
+                        GameLogic.bullets.add(new Bullet(angle, x, y));
+                    }else if(powerLevel < 3){
+                        GameLogic.bullets.add(new Bullet(angle, x + 5, y));
+                        GameLogic.bullets.add(new Bullet(angle, x - 5, y));
+                    }
+                    else if(powerLevel < 4){
+                        GameLogic.bullets.add(new Bullet(angle - 0.1, x - 5, y));
+                        GameLogic.bullets.add(new Bullet(angle, x, y));
+                        GameLogic.bullets.add(new Bullet(angle + 0.1, x + 5, y));
+                    }else if(powerLevel < 5){
+                        GameLogic.bullets.add(new Bullet(265, x - 5, y));
+                        GameLogic.bullets.add(new Bullet(265, x - 10, y));
+                        GameLogic.bullets.add(new Bullet(270, x, y));
+                        GameLogic.bullets.add(new Bullet(275, x + 5, y));
+                        GameLogic.bullets.add(new Bullet(275, x + 10, y));
+                    }else if (powerLevel < 6) {
+                        GameLogic.bullets.add(new Bullet(270, 4, x + 5, y));
+                        GameLogic.bullets.add(new Bullet(270, 4, x - 5, y));
+                    } else if(powerLevel < 7) {
+                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
+                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
+                }else if(powerLevel < 8) {
+                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
+                    GameLogic.bullets.add(new Bullet(265, 4, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
+                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
+                    GameLogic.bullets.add(new Bullet(275, 4, x + 15, y));
+                }*/
 
             }
+
         }
 
         //collapse
@@ -231,5 +314,22 @@ public class Player implements Mobile, Wounded {
             g.drawOval((int) x - radius, (int) y - radius, 2 * radius, 2 * radius);
         }
 
+    }
+
+    public void setDirection() {  //для стрельбы мышкой
+        //direction
+        if (mouseX < GamePanel.getWIDTH() && mouseY < GamePanel.getHEIGHT()) {
+            double dx = mouseX - x;
+            double dy = mouseY - y;
+            double dist = Math.sqrt(dx*dx + dy*dy);
+
+            if(dx > 0) {
+                angle = Math.asin(dy / dist);
+            }
+            else if(dx < 0){
+                angle = Math.PI - Math.asin(dy / dist);
+            }
+
+        }
     }
 }

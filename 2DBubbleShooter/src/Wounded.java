@@ -3,7 +3,7 @@
  * 2DBubbleShooter
  */
 public interface Wounded {
-    public void hit();
+    void hit(int powerOfBullet);
 
-    public boolean isDead();
+    boolean isDead();
 }

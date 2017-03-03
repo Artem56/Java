@@ -10,10 +10,10 @@ import java.util.Comparator;
 public abstract class GameLogic {
 
     //FIELDS
-    public static long waveStartTimer;      //ns
-    public static long waveStartTimerDiff;  //ms
+    private static long waveStartTimer;      //ns
+    protected static long waveStartTimerDiff;  //ms
     private static boolean waveStart;
-    public static final int waveDelay = 3000;
+    public static final int waveDelay = 4000;
     public static long slowDownTimer;
     public static long slowDownTimerDiff;
     public static final int slowDownLength = 5000;  //ms
@@ -21,7 +21,7 @@ public abstract class GameLogic {
 
     private static final int FPS = 30;
 
-    public static boolean running;
+    private static boolean running;
 
     public static Player player;
     public static ArrayList<Bullet> bullets = new ArrayList<>();
@@ -30,7 +30,7 @@ public abstract class GameLogic {
     public static ArrayList<Explosion> explosions = new ArrayList<>();
     public static ArrayList<Text> texts = new ArrayList<>();
     public static ArrayList<Saver> profiles = new ArrayList<>();
-    private boolean paused;
+    //private boolean paused;
 
     //CONSTRUCTOR
 
@@ -41,16 +41,20 @@ public abstract class GameLogic {
         running = b;
     }
 
+    public boolean isRunning(){
+        return running;
+    }
+
+    /*public boolean isPaused(){
+        return paused;
+    }*/
+
     public static void gameLoop(){
 
         long startTime;                //ns
         long loopTime;                  //ms
         long waitTime;                 //ms
-        long totalTime = 0;            //ms
         long targetTime = 1000/FPS;    //ms
-
-        int frameCount = 0;
-        final int maxFrameCount = 30;
 
         player = new Player();
         gameStartTime = System.currentTimeMillis();
@@ -73,59 +77,51 @@ public abstract class GameLogic {
                 System.out.println("ERROR in loop, the thread can't sleep");
                 e.printStackTrace();
             }
-
-            totalTime += (System.nanoTime() - startTime)/1000_000;
-            frameCount++;
         }
 
     }
 
-    public static void saveResult(){
+    public static void saveResult() {
         //сохранение
         profiles = Saver.deserData();
 
         String name = JOptionPane.showInputDialog(null, "Введите ваше имя\n" +
                 "для сохранения результата");
         Saver profile = new Saver(name, player.getScore());
+        if(profile.getName() != null && profile.getScore() != 0) {
 
-        //проверка на одинаковые имена
+            //проверка на одинаковые имена
+            if (profiles.size() == 0) {
+                profiles.add(profile);
+            }
 
-        //System.out.println("1 " + profiles.size());
-        for(int i = 0;i < profiles.size();i++){
-            Saver pr = profiles.get(i);
-            if (profile.getName().equals(pr.getName())) {
-                if (profile.getScore() > pr.getScore()) {
-                    //System.out.println("2 " + profiles.size());
-                    profiles.remove(pr);
+            for (int i = 0; i < profiles.size(); i++) {
+                Saver pr = profiles.get(i);
+                if (profile.getName().equals(pr.getName())) {
+                    if (profile.getScore() > pr.getScore()) {
+                        pr.setScore(profile.getScore());
+                        i = profiles.size();
+                    }
+                }else{
+                    profiles.add(profile);
                     i = profiles.size();
-                }else if (profile.getScore() <= pr.getScore()){
-                    profiles.remove(profile);
-                    i = profiles.size();
-                    //System.out.println("3 " + profiles.size());
-                    System.out.println(" " + profile.getName() + " " + pr.getName());
                 }
             }
         }
-        profiles.add(profile);
-        //System.out.println("4 " + profiles.size());
-        if(profiles.size() == 0){
-            profiles.add(profile);
-        }
 
-        Collections.sort(profiles, new Comparator<Saver>() {
-            public int compare(Saver o1, Saver o2) {
+            Collections.sort(profiles, (Saver o1, Saver o2) -> {
                 return o2.getScore() - o1.getScore();
-            }
-        });
+                    }
+            );
 
-        Saver.serData(profiles);
+            Saver.serData(profiles);
 
-        Saver.draw(GamePanel.g);
-    }
+            Saver.draw(GamePanel.g);
+        }
 
     public static void wave(){
         if(waveStartTimer == 0 && enemies.size() == 0){
-            Levels.waveNumber++;
+            Levels.addWaveNumber();
             waveStartTimer = System.nanoTime();
         }else{     //если волна уже идет
             waveStartTimerDiff = (System.nanoTime() - waveStartTimer) / 1000_000;
@@ -198,14 +194,14 @@ public abstract class GameLogic {
                 double random = Math.random();
                 if(random < 0.01){          //шанс 1 к 100, всего в 1 из 3 что-то выпадает
                     powerUps.add(new PowerUp(1, dead.getX(), dead.getY()));
-                }else if(random < 0.1){
-                    powerUps.add(new PowerUp(2, dead.getX(), dead.getY()));
-                }else if(random < 0.02){
+                }else if(random < 0.06){
                     powerUps.add(new PowerUp(3, dead.getX(), dead.getY()));
-                }else if(random < 0.15){
-                    powerUps.add(new PowerUp(4, dead.getX(), dead.getY()));
-                }else if(random < 0.05){
+                }else if(random < 0.11){
                     powerUps.add(new PowerUp(5, dead.getX(), dead.getY()));
+                }else if(random < 0.21){
+                    powerUps.add(new PowerUp(4, dead.getX(), dead.getY()));
+                }else if(random < 0.33){
+                    powerUps.add(new PowerUp(2, dead.getX(), dead.getY()));
                 }
 
                 player.addScore(dead.getCost());

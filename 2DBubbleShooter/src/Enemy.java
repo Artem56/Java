@@ -9,7 +9,7 @@ public class Enemy implements Mobile, Wounded {
 
     private double x;
     private double y;
-    public int radius;
+    private int radius;
     private double dx;
     private double dy;
 
@@ -39,7 +39,7 @@ public class Enemy implements Mobile, Wounded {
 
         EnemyTypes.createEnemy(this);
 
-        x = Math.random() * GamePanel.WIDTH;
+        x = Math.random() * GamePanel.getWIDTH();
         y = -radius;
 
         radians = Math.toRadians(Math.random() * 120 + 30);
@@ -59,6 +59,18 @@ public class Enemy implements Mobile, Wounded {
 
     public int getRadius() {
         return radius;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public int getCost(){
@@ -81,8 +93,8 @@ public class Enemy implements Mobile, Wounded {
         this.slow = slow;
     }
 
-    public void hit(){
-        health--;
+    public void hit(int radius){
+        health = health - radius / 2;
         if(health <= 0){
             dead = true;
         }
@@ -95,7 +107,7 @@ public class Enemy implements Mobile, Wounded {
         return dead;
     }
 
-    public void explode(){
+     void explode(){
         if(size > 1){
             int amount = 2;
 
@@ -130,8 +142,8 @@ public class Enemy implements Mobile, Wounded {
 
         if(x < radius && dx < 0) dx = -dx;
         if(y < radius && dy < 0) dy = -dy;
-        if(x > GamePanel.WIDTH - radius && dx > 0) dx = -dx;
-        if(y > GamePanel.HEIGHT - radius && dy > 0) dy = -dy;
+        if(x > GamePanel.getWIDTH() - radius && dx > 0) dx = -dx;
+        if(y > GamePanel.getHEIGHT() - radius && dy > 0) dy = -dy;
 
         if(hit){
             int elapsed = (int)(System.nanoTime() - hitTimer) / 1000_000;     //ms

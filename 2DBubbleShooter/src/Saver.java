@@ -20,11 +20,9 @@ public class Saver implements Serializable {
     public Saver(String name, int score){
         this.name = name;
         this.score = score;
-
     }
 
     //METHODS
-
 
     public String getName() {
         return name;
@@ -85,16 +83,15 @@ public class Saver implements Serializable {
 
     public static void draw(Graphics2D g){
 
-
         g.setColor(new Color(100, 50, 200));     //game over
-        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        g.fillRect(0, 0, GamePanel.getWIDTH(), GamePanel.getHEIGHT());
         g.setColor(Color.black);
-        g.drawString("Name " + "               " + "Score\n", GamePanel.WIDTH - 580, GamePanel.HEIGHT - 570 );
+        g.drawString("Name " + "               " + "Score\n", GamePanel.getWIDTH() - 580, GamePanel.getHEIGHT() - 570 );
 
         for(int i = 0;i < 10 && i < GameLogic.profiles.size();i++) {
                 Saver pr = GameLogic.profiles.get(i);
-                g.drawString("" + pr.getName(), GamePanel.WIDTH - 580, GamePanel.HEIGHT - 520 + i * 50);
-                g.drawString("" + pr.getScore() + "\n", GamePanel.WIDTH - 380, GamePanel.HEIGHT - 520 + i * 50);
+                g.drawString("" + pr.getName(), GamePanel.getWIDTH() - 580, GamePanel.getHEIGHT() - 520 + i * 50);
+                g.drawString("" + pr.getScore() + "\n", GamePanel.getWIDTH() - 380, GamePanel.getHEIGHT() - 520 + i * 50);
         }
     }
 }

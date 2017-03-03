@@ -17,6 +17,10 @@ public class Bullet implements Mobile {
     private final int speed = 10;
     private final Color color1 = Color.yellow;
 
+    private double distX;
+    private double distY;
+    private double dist;
+
     //CONSTRUCTOR
 
     public Bullet(double angle, double x, double y){
@@ -24,7 +28,12 @@ public class Bullet implements Mobile {
         this.y = y;
         radius = 2;
 
+        /*distX = GameLogic.player.getMouseX() - GameLogic.player.getX();
+        distY = GameLogic.player.getMouseY() - GameLogic.player.getY();
+        dist = Math.sqrt(distX * distX + distY * distY);*/       //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
+
         radians = Math.toRadians(angle);
+        //radians = angle;           //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
     }
 
     public Bullet(double angle, int radius, double x, double y){
@@ -33,10 +42,10 @@ public class Bullet implements Mobile {
         this.radius = radius;
 
         radians = Math.toRadians(angle);
+        //radians = angle;           //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
     }
 
     //METHODS
-
     public double getX() {
         return x;
     }
@@ -53,7 +62,11 @@ public class Bullet implements Mobile {
         x += Math.cos(radians) * speed;
         y += Math.sin(radians) * speed;
 
-        if(x < -radius || x > GamePanel.WIDTH + radius || y < -radius || y > GamePanel.HEIGHT + radius){
+        /*x +=  distX/dist * speed;//ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
+        y +=  distY/dist * speed;*/
+
+
+        if(x < -radius || x > GamePanel.getWIDTH() + radius || y < -radius || y > GamePanel.getHEIGHT() + radius){
             return true;
         }
 

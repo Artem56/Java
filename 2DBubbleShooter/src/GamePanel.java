@@ -1,19 +1,16 @@
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 /**
  * Created by Artem Solomatin on 08.02.17.
  * 2DBubbleShooter
  */
-public class GamePanel extends JPanel implements Runnable, KeyListener {
+public class GamePanel extends JPanel implements Runnable {
 
     //FIELDS
-    public final static int WIDTH = 600;
-    public final static int HEIGHT = 600;
+    private final static int WIDTH = 600;
+    private final static int HEIGHT = 600;
     private Thread thread;   //для запуска игры
 
     private BufferedImage image;
@@ -22,13 +19,32 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     //CONSTRUCTOR
     public GamePanel(){
-        super();
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
         requestFocus();       //for work with the keyboard
+        addKeyListener(new Listener());
+        addMouseMotionListener(new Listener());
+        addMouseListener(new Listener());
     }
 
     //FUNCTIONS
+
+
+    public static int getWIDTH() {
+        return WIDTH;
+    }
+
+    public static int getHEIGHT() {
+        return HEIGHT;
+    }
+
+    public static boolean isPaused() {
+        return paused;
+    }
+
+    public static void setPaused(){
+        paused = !paused;
+    }
 
     public void addNotify(){   // метод вызывается тогда, когда GamePanel добавляется в родительский компонент с помощью add() и заканчивает создаваться
         super.addNotify();
@@ -37,13 +53,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             thread = new Thread(this);
         }
         thread.start();
-
-        addKeyListener(this);
     }
 
     @Override
     public void run(){
-        GameLogic.running = true;
+        GameLogic.setRunning(true);
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
         g = (Graphics2D) image.getGraphics();     //в переменную g мы записали ссылку на контекст отображения для изображения image
         g.setRenderingHint(                       //сглаживание
@@ -57,24 +71,39 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         GameLogic.gameLoop();
 
-        g.setColor(new Color(100, 50, 200));     //game over
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.PLAIN, 26));
-        String s = "G A M E   O V E R";
-        int length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 80);
-        s = "Final Score: " + GameLogic.player.getScore();
-        length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 40);
-        s = "Time: " + ((System.currentTimeMillis() - GameLogic.gameStartTime) / 1000) + "seconds";
-        length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2);
+        if (GameLogic.player.getLives() == 0) {
+            g.setColor(new Color(100, 50, 200));     //game over
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.PLAIN, 26));
+            String s = "G A M E   O V E R";
+            int length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 80);
+            s = "Final Score: " + GameLogic.player.getScore();
+            length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 40);
+            s = "Time: " + ((System.currentTimeMillis() - GameLogic.gameStartTime) / 1000) + "seconds";
+            length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2);
+        }else if (GameLogic.player.getLives() != 0){
+            g.setColor(new Color(100, 50, 200));     //game over
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.PLAIN, 26));
+            String s = "Y O U   W I N";
+            int length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 80);
+            s = "Final Score: " + GameLogic.player.getScore();
+            length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2 - 40);
+            s = "Time: " + ((System.currentTimeMillis() - GameLogic.gameStartTime) / 1000) + "seconds";
+            length = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
+            g.drawString(s, (WIDTH - length) / 2, HEIGHT / 2);
+        }
 
         gameDraw();
 
         GameLogic.saveResult();
-
 
         gameDraw();
     }
@@ -105,7 +134,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
 
         //boss background
-        if(Levels.waveNumber % 5 == 0){  //boss
+        if(Levels.getWaveNumber() % 5 == 0){  //boss
             g.setColor(new Color(0, 100, 155));
             g.fillRect(0, 0, WIDTH, HEIGHT);
         }
@@ -158,9 +187,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         //wave number
         String s = null;
-        if(Levels.waveNumber % 5 != 0) {
-            s = "| W A V E   " + Levels.waveNumber + "|";
-        }else if(Levels.waveNumber % 5 == 0){
+        if(Levels.getWaveNumber() % 5 != 0) {
+            s = "| W A V E   " + Levels.getWaveNumber() + "|";
+        }else if(Levels.getWaveNumber() % 5 == 0){
             s = "| B O S S |";
         }
         //g.drawString(" " + slowDownTimer / 1000_000, 100, 50);
@@ -173,10 +202,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         //player lives
         for (i = 0; i < GameLogic.player.getLives(); i++) {
             g.setColor(Color.white);
-            g.fillOval(10 + 30 * i, 20, GameLogic.player.getRadius() * 3, GameLogic.player.getRadius() * 3);
+            g.fillOval(10 + 30 * i, 20, GameLogic.player.getRadius() * 2, GameLogic.player.getRadius() * 2);
             g.setStroke(new BasicStroke(3));           //граница
             g.setColor(Color.gray);
-            g.drawOval(10 + 30 * i, 20, 3 * GameLogic.player.getRadius(), 3 * GameLogic.player.getRadius());
+            g.drawOval(10 + 30 * i, 20, 2 * GameLogic.player.getRadius(), 2 * GameLogic.player.getRadius());
         }
 
         //score
@@ -186,13 +215,33 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         //power
         g.setColor(Color.yellow);
-        g.fillRect(20, 40, GameLogic.player.getPower() * 10, 10);
-        for (i = 0; i < GameLogic.player.getRequiredPower(); i++) {
-            g.setStroke(new BasicStroke(2));
-            g.setColor(Color.yellow.darker());
-            g.drawRect(20 + 10 * i, 40, 10, 10);
-            g.setStroke(new BasicStroke(1));
-
+        if(GameLogic.player.getRequiredPower() <= 50) {
+            g.fillRect(20, 40, GameLogic.player.getPower() * 10, 10);
+            for (i = 0; i < GameLogic.player.getRequiredPower(); i++) {
+                g.setStroke(new BasicStroke(2));
+                g.setColor(Color.yellow.darker());
+                g.drawRect(20 + 10 * i, 40, 10, 10);
+                g.setStroke(new BasicStroke(1));
+            }
+        }else if(GameLogic.player.getRequiredPower() > 50 && GameLogic.player.getRequiredPower() <= 100){
+            if(GameLogic.player.getPower() <= 50)
+                g.fillRect(20, 40, GameLogic.player.getPower() * 10, 10);
+            if(GameLogic.player.getPower() > 50) {
+                g.fillRect(20, 40, 500, 10);
+                g.fillRect(20, 55, (GameLogic.player.getPower() - 50) * 10, 10);
+            }
+            for (i = 0; i < 50; i++) {
+                g.setStroke(new BasicStroke(2));
+                g.setColor(Color.yellow.darker());
+                g.drawRect(20 + 10 * i, 40, 10, 10);
+                g.setStroke(new BasicStroke(1));
+            }
+            for (i = 0; i < GameLogic.player.getRequiredPower() - 50; i++) {
+                g.setStroke(new BasicStroke(2));
+                g.setColor(Color.yellow.darker());
+                g.drawRect(20 + 10 * i, 55, 10, 10);
+                g.setStroke(new BasicStroke(1));
+            }
         }
 
         //slowdown meter
@@ -216,46 +265,5 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void gameDraw(){
         Graphics g2 = this.getGraphics();           //рисует настоящий игровой экран
         g2.drawImage(image, 0, 0, null);
-    }
-
-    public void setPaused(){
-        paused = !paused;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e){
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(true);
-                break;
-            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(true);
-                break;
-            case KeyEvent.VK_UP : GameLogic.player.setUp(true);
-                break;
-            case KeyEvent.VK_DOWN : GameLogic.player.setDown(true);
-                break;
-            case KeyEvent.VK_SPACE : GameLogic.player.setFiring(true);
-                break;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(false);
-                break;
-            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(false);
-                break;
-            case KeyEvent.VK_UP : GameLogic.player.setUp(false);
-                break;
-            case KeyEvent.VK_DOWN : GameLogic.player.setDown(false);
-                break;
-            case KeyEvent.VK_SPACE : GameLogic.player.setFiring(false);
-                break;
-            case KeyEvent.VK_Q : setPaused();
-                break;
-        }
     }
 }
