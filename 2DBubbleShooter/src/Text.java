@@ -47,10 +47,14 @@ public class Text implements Mobile {
         long elapsed = (System.nanoTime() - startTime) / 1000_000;   //ms
         int transparancy = (int)(255*Math.sin(Math.PI * elapsed / time));
 
-        if(transparancy > 255){   //почему- то может вылететь ошибка
-            transparancy = 255;
+        if(transparancy >= 255){   //почему- то может вылететь ошибка)
+            transparancy = 254;
         }
-        g.setColor(new Color(255, 255, 255, transparancy));
+        try {
+            g.setColor(new Color(255, 255, 255, transparancy));
+        }catch (IllegalArgumentException e){
+            System.out.println("Ошибка прорисовки текста. Поправил.");
+        }
         g.drawString(s, (int)x, (int)y);
 
     }

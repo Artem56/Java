@@ -25,6 +25,7 @@ public class Game {
         window.setContentPane(panel);
 
         window.pack();
+        window.setResizable(false);
         window.setVisible(true);
 
     }

@@ -193,12 +193,12 @@ public class Player implements Mobile, Wounded {
                     GameLogic.bullets.add(new Bullet(270, x + 5, y));
                     GameLogic.bullets.add(new Bullet(270, x - 5, y));
                 } else if (powerLevel < 4) {
-                    GameLogic.bullets.add(new Bullet(265, x - 5, y));
+                    GameLogic.bullets.add(new Bullet(260, x - 5, y));
                     GameLogic.bullets.add(new Bullet(270, x, y));
-                    GameLogic.bullets.add(new Bullet(275, x + 5, y));
+                    GameLogic.bullets.add(new Bullet(280, x + 5, y));
                 } else if (powerLevel < 5) {
-                    GameLogic.bullets.add(new Bullet(262, x - 5, y));
-                    GameLogic.bullets.add(new Bullet(266, x - 10, y));
+                    GameLogic.bullets.add(new Bullet(262, x - 10, y));
+                    GameLogic.bullets.add(new Bullet(266, x - 5, y));
                     GameLogic.bullets.add(new Bullet(270, x, y));
                     GameLogic.bullets.add(new Bullet(274, x + 5, y));
                     GameLogic.bullets.add(new Bullet(278, x + 10, y));
@@ -206,12 +206,12 @@ public class Player implements Mobile, Wounded {
                     GameLogic.bullets.add(new Bullet(270, 4, x + 5, y));
                     GameLogic.bullets.add(new Bullet(270, 4, x - 5, y));
                 } else if (powerLevel < 7) {
-                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
+                    GameLogic.bullets.add(new Bullet(260, 4, x - 7, y));
                     GameLogic.bullets.add(new Bullet(270, 4, x, y));
-                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
+                    GameLogic.bullets.add(new Bullet(270, 4, x + 7, y));
                 } else if (powerLevel < 8) {
-                    GameLogic.bullets.add(new Bullet(262, 4, x - 7, y));
-                    GameLogic.bullets.add(new Bullet(266, 4, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(262, 4, x - 15, y));
+                    GameLogic.bullets.add(new Bullet(266, 4, x - 7, y));
                     GameLogic.bullets.add(new Bullet(270, 4, x, y));
                     GameLogic.bullets.add(new Bullet(274, 4, x + 7, y));
                     GameLogic.bullets.add(new Bullet(278, 4, x + 15, y));

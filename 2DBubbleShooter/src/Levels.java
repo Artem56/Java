@@ -4,7 +4,7 @@
  */
 public abstract class Levels {
     //FIELDS
-    private static int waveNumber;
+    private static int waveNumber = 10;
 
     //METHODS
     public static int getWaveNumber() {
@@ -147,5 +147,4 @@ public abstract class Levels {
     }
 
 }
-
 }

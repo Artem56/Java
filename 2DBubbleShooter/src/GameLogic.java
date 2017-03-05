@@ -71,7 +71,7 @@ public abstract class GameLogic {
             waitTime = (targetTime - loopTime);
             try{
                 if(waitTime > 0) {     //время первого прохода огромное
-                    Thread.sleep(waitTime);
+                    GamePanel.thread.sleep(waitTime);
                 }
             } catch (InterruptedException e) {
                 System.out.println("ERROR in loop, the thread can't sleep");

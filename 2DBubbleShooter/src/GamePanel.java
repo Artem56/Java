@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
     //FIELDS
     private final static int WIDTH = 600;
     private final static int HEIGHT = 600;
-    private Thread thread;   //для запуска игры
+    public static Thread thread;   //для запуска игры
 
     private BufferedImage image;
     public static Graphics2D g;
@@ -28,8 +28,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     //FUNCTIONS
-
-
     public static int getWIDTH() {
         return WIDTH;
     }
@@ -131,12 +129,13 @@ public class GamePanel extends JPanel implements Runnable {
         if(GameLogic.slowDownTimer == 0) {
             g.setColor(new Color(0, 100, 255));
             g.fillRect(0, 0, WIDTH, HEIGHT);
-        }
 
-        //boss background
-        if(Levels.getWaveNumber() % 5 == 0){  //boss
-            g.setColor(new Color(0, 100, 155));
-            g.fillRect(0, 0, WIDTH, HEIGHT);
+
+            //boss background
+            if (Levels.getWaveNumber() % 5 == 0) {  //boss
+                g.setColor(new Color(0, 100, 155));
+                g.fillRect(0, 0, WIDTH, HEIGHT);
+            }
         }
 
         //slow background
@@ -255,7 +254,6 @@ public class GamePanel extends JPanel implements Runnable {
         //paused
         if(paused) {
             String sPause = "Game is paused";
-            int lengthPause = (int) g.getFontMetrics().getStringBounds(s, g).getWidth();
             g.setColor(Color.white);
             g.setFont(new Font("Areal", Font.PLAIN, 28));
             g.drawString(sPause, (WIDTH - length) / 2, 100);
