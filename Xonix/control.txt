@@ -1,0 +1,4 @@
+1 - add one hp
+q - pause
+left mouse button - fire
+arrows - control
