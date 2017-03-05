@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
     //FIELDS
     private final static int WIDTH = 600;
     private final static int HEIGHT = 600;
-    public static Thread thread;   //для запуска игры
+    //public static Thread thread;   //для запуска игры
 
     private BufferedImage image;
     public static Graphics2D g;
@@ -42,15 +42,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static void setPaused(){
         paused = !paused;
-    }
-
-    public void addNotify(){   // метод вызывается тогда, когда GamePanel добавляется в родительский компонент с помощью add() и заканчивает создаваться
-        super.addNotify();
-
-        if(thread == null){
-            thread = new Thread(this);
-        }
-        thread.start();
     }
 
     @Override

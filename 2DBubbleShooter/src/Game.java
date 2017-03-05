@@ -18,11 +18,17 @@ import javax.swing.*;
 
 public class Game {
     public static GamePanel panel = new GamePanel();
+    public static Thread thread;   //для запуска игры
 
     public static void main (String[] args){
         JFrame window = new JFrame("Bubble Shooter");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(panel);
+
+        if(thread == null){
+            thread = new Thread(panel);
+        }
+        thread.start();
 
         window.pack();
         window.setResizable(false);
