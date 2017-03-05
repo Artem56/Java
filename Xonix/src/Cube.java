@@ -1,5 +1,5 @@
 /**
- * Created by Artem Solomatin on 03.03.17.
+ * Created by Artem Solomatin on 05.03.17.
  * Xonix
  */
 public class Cube {

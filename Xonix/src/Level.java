@@ -2,10 +2,9 @@
  * Created by Artem Solomatin on 05.03.17.
  * Xonix
  */
-public class Ball {
+public class Level {
     //FIELDS
-
-    //CONSTRUCTOR
+    public static int waveNumber;
 
     //METHODS
 }
