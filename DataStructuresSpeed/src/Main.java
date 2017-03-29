@@ -5,13 +5,19 @@ import java.util.*;
  * DataStructuresSpeed
  */
 
-/**
+/**Измерение скорости выполнения основных операций в различных структурах данных в Java
+ *
+ *
  * Аргументом командной строки является количество элементов (NUMBER), на котором будут проводится тест.
  * Изначально все структуры данных содержат 10 * NUMBER элементов.
  * Затем проводится тест на добавление NUMBER элементов.
  * Затем проводится тест на удаление NUMBER элементов.
  * Затем сократим структуру до NUMBER элементов.
  * Затем проведем NUMBER тестов на поиск рандомных чисел.
+ */
+
+/*
+Доделать массивы
  */
 public class Main {
     private static int NUMBER;
@@ -35,8 +41,11 @@ public class Main {
     LinkedHashMap<String, Integer> removeResults;
     LinkedHashMap<String, Integer> searchResults;
 
+    long totalTime;
+
 
     public static void main(String[] args){
+        long startTime = System.currentTimeMillis();
 
         NUMBER = Integer.parseInt(args[0]);
 
@@ -44,17 +53,21 @@ public class Main {
 
         //test.arrayInitialization();
         test.initialization();
-        for(Collection<Integer> collect: test.usedCollections){
-            test.insertSpeed(collect);
-            test.searchSpeed(collect);
-            test.removeSpeed(collect);
+        for(Collection<Integer> current: test.usedCollections){
+            test.insertSpeed(current);
+            test.removeSpeed(current);
+            test.reduceCollection(current);
+            test.searchSpeed(current);
         }
+        test.totalTime = System.currentTimeMillis() - startTime;
 
         test.print();
 
+
+
     }
 
-    Main(){
+    private Main(){
         //массивы
         intArray = new int[NUMBER * 11];
         integerArray = new Integer[NUMBER * 11];
@@ -129,11 +142,6 @@ public class Main {
 
     private void searchSpeed(Collection<Integer> collection){
         int i;
-        for(i = 0;i < NUMBER * 9;i++){       //очистим структуру, оставив NUMBER элементов
-            Integer tmp = (int)(Math.random() * NUMBER);
-            collection.remove(tmp);
-        }
-
         long startTime = System.currentTimeMillis();
         for(i = 0;i < NUMBER;i++){
             Integer tmp = (int)(Math.random() * NUMBER);
@@ -154,7 +162,16 @@ public class Main {
         removeResults.put(collection.getClass().toString(), (int)(endTime - startTime));
     }
 
+    private void reduceCollection(Collection<Integer> collection){
+        int i;
+        for(i = 0;i < NUMBER * 9;i++){       //очистим структуру, оставив NUMBER элементов
+            Integer tmp = (int)(Math.random() * NUMBER);
+            collection.remove(tmp);
+        }
+    }
+
     private void print(){
+        System.out.println("Total time for test is: " + totalTime / 1000 + " seconds");
         System.out.println("Insert speed");
         for(Map.Entry<String, Integer> entry : insertResults.entrySet()){
             System.out.println(entry.getKey() + " " + entry.getValue());
