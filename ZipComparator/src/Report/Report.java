@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Artem Solomatin on 09.04.17.
+ * Created by Artem Solomatin on 10.04.17.
  * ZipComparator
  */
-public class GeneralReport extends ArrayList<Note> {
+public class Report{
     //FIELDS
+    public ArrayList<Note> messages = new ArrayList<Note>();
     private final String columnSeparator = "|";
     private final char rowSeparator = '*';
     private int width;
 
     //METHODS
     public String printReport() {
-        if(!isEmpty()) {
-            return printHead() + printBody();
+        if(!messages.isEmpty()) {
+            return printHead() + printBody() + printTail();
         }
         return "";
     }
@@ -27,7 +28,7 @@ public class GeneralReport extends ArrayList<Note> {
 
     private int findMaxSize(){    //МАКСИМАЛЬНЫЙ РАЗМЕР ДОКЛАДА
         int size = 0;
-        for(Note report : this)
+        for(Note report : messages)
             if(report.size() > size)
                 size = report.size();
         return size;
@@ -41,11 +42,11 @@ public class GeneralReport extends ArrayList<Note> {
 
     private String printHead() {     //ПЕРВАЯ СТРОКА ОТЧЕТА
         String headString = columnSeparator;
-        for (Note report : this) {
+        for (Note report : messages) {
             headString += constructLine(report.getNameReport(), report.getRowWidth());
         }
         width = headString.length();
-        return headString + "\n" + createLineSeparator(headString.length() - 2) + "\n";
+        return createLineSeparator(headString.length() - 2) + "\n" + headString + "\n" + createLineSeparator(headString.length() - 2) + "\n";
     }
 
     private String printBody(){
@@ -53,11 +54,15 @@ public class GeneralReport extends ArrayList<Note> {
         int maxSize = findMaxSize();
         for(int i = 0 ; i < maxSize ; i++){               //по строкам
             String bodyString = columnSeparator;
-            for(Note report : this)
+            for(Note report : messages)
                 bodyString += constructLine(report.get(i) , report.getRowWidth());
             body.append(bodyString + "\n");
         }
         return body.toString() + createLineSeparator(width - 2) + "\n";
+    }
+
+    private String printTail(){
+        return columnSeparator + constructLine("+ added   - deleted   * renamed   # changed", width - 4) + "\n" + createLineSeparator(width - 2) + "\n";
     }
 
 }

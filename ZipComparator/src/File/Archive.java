@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Artem Solomatin on 09.04.17.
  * ZipComparator
  */
-public class Directory extends ArrayList<FileInfo>{
+public class Archive extends ArrayList<FileInfo>{
     //FIELDS
     private FileInfo lastComparedObject;
 

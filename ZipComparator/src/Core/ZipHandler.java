@@ -1,11 +1,10 @@
 package Core;
 
-import File.Directory;
+import File.Archive;
 import File.FileInfo;
 import File.FileStatus;
-import File.ZipFileInfo;
-import Report.FileReport;
-import Report.GeneralReport;
+import Report.Report;
+import Report.Note;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -26,33 +25,33 @@ public abstract class ZipHandler {
             return "A comparison of the same file\n";
         }
 
-        Directory Zip1 = getContentsZip(new ZipFile(pathToZip1));
-        Directory Zip2 = getContentsZip(new ZipFile(pathToZip2));
+        Archive Zip1 = getContentsZip(new ZipFile(pathToZip1));
+        Archive Zip2 = getContentsZip(new ZipFile(pathToZip2));
 
-        GeneralReport generalReport = new GeneralReport();
-        FileReport reportZip1 = new FileReport(pathToZip1);
-        FileReport reportZip2 = new FileReport(pathToZip2);
+        Report mainReport = new Report();
+        Note reportZip1 = new Note(pathToZip1);
+        Note reportZip2 = new Note(pathToZip2);
 
         compareDirectoryInfo(reportZip1 , Zip1 , reportZip2 , Zip2);
 
-        generalReport.add(reportZip1);
-        generalReport.add(reportZip2);
+        mainReport.messages.add(reportZip1);
+        mainReport.messages.add(reportZip2);
 
-        return generalReport.printReport();
+        return mainReport.printReport();
     }
 
-    private static Directory getContentsZip(ZipFile zip) throws IOException {   //НАХОДИТ ВСЕ ФАЙЛЫ В ZIP'Е
-        Directory directory = new Directory();
+    private static Archive getContentsZip(ZipFile zip) throws IOException {   //НАХОДИТ ВСЕ ФАЙЛЫ В ZIP'Е
+        Archive directory = new Archive();
         Enumeration<? extends ZipEntry> entryEnumeration = zip.entries();    //перечисление файлов в архиве
         while(entryEnumeration.hasMoreElements()) {
             ZipEntry zipEntry;
             zipEntry = entryEnumeration.nextElement();
-            directory.add(new ZipFileInfo(zipEntry));
+            directory.add(new FileInfo(zipEntry));
         }
         return directory;
     }
 
-    private static void compareDirectoryInfo(FileReport reportZip1, Directory Zip1, FileReport reportZip2, Directory Zip2){
+    private static void compareDirectoryInfo(Note reportZip1, Archive Zip1, Note reportZip2, Archive Zip2){
         for(FileInfo fileFromZip1 : Zip1){
             FileStatus state = Zip2.compareToObject(fileFromZip1);
             FileInfo similarFile = Zip2.getComparedObject();

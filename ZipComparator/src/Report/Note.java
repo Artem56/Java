@@ -15,7 +15,7 @@ public class Note{
     private int rowWidth;
 
     //CONSTRUCTOR
-    Note(String name){
+    public Note(String name){
         messages = new ArrayList<>();
         rowWidth = name.length();
         reportOwner = name;
@@ -46,5 +46,21 @@ public class Note{
 
     public String getNameReport(){
         return reportOwner;
+    }
+
+    public void fileChanged(String name){
+        addMessage("* " + name);
+    }
+
+    public void fileRemoved(String name){
+        addMessage("- " + name);
+    }
+
+    public void fileAdd(String name){
+        addMessage("+ " + name);
+    }
+
+    public void fileRenamed(String name){
+        addMessage("# " + name);
     }
 }
