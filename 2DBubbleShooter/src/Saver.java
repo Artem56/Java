@@ -9,6 +9,10 @@ import java.util.Comparator;
  * Created by Artem Solomatin on 14.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class is responsible for saving and loading of results and drawing them on the screen
+ */
 public class Saver implements Serializable {
     //FIELDS
     private String name;
@@ -16,14 +20,15 @@ public class Saver implements Serializable {
 
     private final static String fileName = "liderboard.ser";
 
+
     //CONSTRUCTOR
     public Saver(String name, int score){
         this.name = name;
         this.score = score;
     }
 
-    //METHODS
 
+    //METHODS
     public String getName() {
         return name;
     }
@@ -41,14 +46,9 @@ public class Saver implements Serializable {
     }
 
     public static void serData(ArrayList<Saver> profiles){
-        FileOutputStream fileOut = null;
-        ObjectOutputStream out = null;
-        try {
-            fileOut = new FileOutputStream(fileName);
-            out = new ObjectOutputStream(fileOut);
+        try(FileOutputStream fileOut = new FileOutputStream(fileName);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(profiles);
-            fileOut.close();
-            out.close();
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Файл для сохранения не найден");
             System.exit(1);
@@ -59,15 +59,9 @@ public class Saver implements Serializable {
     }
 
     public static ArrayList<Saver> deserData(){
-        FileInputStream fileIn = null;
-        ObjectInputStream in = null;
         ArrayList<Saver> retSaver = null;
-        try {
-            fileIn = new FileInputStream(fileName);
-            in = new ObjectInputStream(fileIn);
+        try(FileInputStream fileIn = new FileInputStream(fileName); ObjectInputStream in = new ObjectInputStream(fileIn)) {
             retSaver = (ArrayList<Saver>) in.readObject();
-            fileIn.close();
-            in.close();
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Файл для сохранения не найден");
             System.exit(1);

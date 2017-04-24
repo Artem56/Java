@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 13.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class is responsible for drawing and modifying pop-up labels on the screen
+ */
 public class Text implements Mobile {
 
     //FIELDS

@@ -4,6 +4,10 @@ import java.awt.event.*;
  * Created by Artem Solomatin on 17.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class is responsible for the interaction between game and player using keyboard and mouse
+ */
 public class Listener implements KeyListener, MouseMotionListener, MouseListener {
     @Override
     public void keyTyped(KeyEvent e) {}

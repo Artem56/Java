@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 09.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * Class Bullet represents the bullet and is responsible for drawing and changing the state of bullets
+ */
 public class Bullet implements Mobile {
 
     //FIELDS

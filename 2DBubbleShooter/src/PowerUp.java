@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 10.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * Class represents the possible power-ups in the game and is responsible for the drawing and changing on the game screen
+ */
 public class PowerUp {
     // FIELDS
     private double x;
@@ -20,8 +24,8 @@ public class PowerUp {
     //5 -- 2 * power for weapon
     private Color color;
 
-    //CONSTRUCTOR
 
+    //CONSTRUCTOR
     public PowerUp(int type, double x, double y){
         this.type = type;
         this.x = x;
@@ -42,6 +46,7 @@ public class PowerUp {
                 radius = 4;
         }
     }
+
 
     //METHODS
     public double getX() {

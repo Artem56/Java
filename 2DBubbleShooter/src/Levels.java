@@ -2,6 +2,10 @@
  * Created by Artem Solomatin on 13.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class contains the description of all the waves of enemies
+ */
 public abstract class Levels {
     //FIELDS
     private static int waveNumber;

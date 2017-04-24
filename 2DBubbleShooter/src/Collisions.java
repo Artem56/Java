@@ -2,6 +2,10 @@
  * Created by Artem Solomatin on 14.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class is responsible for calculating collisions occurring in the game
+ */
 public abstract class Collisions {
 
     public static void playerPowerCollision(){

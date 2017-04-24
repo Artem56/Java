@@ -2,10 +2,15 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.TreeSet;
 
 /**
  * Created by Artem Solomatin on 16.02.17.
  * 2DBubbleShooter
+ */
+
+/**
+ * the class contains the game loop and is responsible for the creation of new waves, updating the game screen, cutting out bonuses from dead enemies, and starting a saving at the end
  */
 public abstract class GameLogic {
 
@@ -30,26 +35,15 @@ public abstract class GameLogic {
     public static ArrayList<Explosion> explosions = new ArrayList<>();
     public static ArrayList<Text> texts = new ArrayList<>();
     public static ArrayList<Saver> profiles = new ArrayList<>();
-    //private boolean paused;
 
-    //CONSTRUCTOR
 
     //METHODS
-
-
     public static void setRunning(boolean b){
         running = b;
     }
 
-    public boolean isRunning(){
-        return running;
-    }
-
-    /*public boolean isPaused(){
-        return paused;
-    }*/
-
     public static void gameLoop(){
+        gameStartTime = System.currentTimeMillis();
 
         long startTime;                //ns
         long loopTime;                  //ms
@@ -57,7 +51,7 @@ public abstract class GameLogic {
         long targetTime = 1000/FPS;    //ms
 
         player = new Player();
-        gameStartTime = System.currentTimeMillis();
+        //gameStartTime = System.currentTimeMillis();
 
         while(running){
 
@@ -71,7 +65,7 @@ public abstract class GameLogic {
             waitTime = (targetTime - loopTime);
             try{
                 if(waitTime > 0) {     //время первого прохода огромное
-                    Game.thread.sleep(waitTime);
+                    Thread.sleep(waitTime);
                 }
             } catch (InterruptedException e) {
                 System.out.println("ERROR in loop, the thread can't sleep");
@@ -91,7 +85,7 @@ public abstract class GameLogic {
         if(profile.getName() != null && profile.getScore() != 0) {
 
             //проверка на одинаковые имена
-            if (profiles.size() == 0) {
+            if (profiles.isEmpty()) {
                 profiles.add(profile);
             }
 
@@ -109,18 +103,15 @@ public abstract class GameLogic {
             }
         }
 
-            Collections.sort(profiles, (Saver o1, Saver o2) -> {
-                return o2.getScore() - o1.getScore();
-                    }
-            );
+        profiles.sort((Saver o1, Saver o2) -> o2.getScore() - o1.getScore());
 
-            Saver.serData(profiles);
+        Saver.serData(profiles);
 
-            Saver.draw(GamePanel.g);
-        }
+        Saver.draw(GamePanel.g);
+    }
 
     public static void wave(){
-        if(waveStartTimer == 0 && enemies.size() == 0){
+        if(waveStartTimer == 0 && enemies.isEmpty()){
             Levels.addWaveNumber();
             waveStartTimer = System.nanoTime();
         }else{     //если волна уже идет
@@ -133,7 +124,7 @@ public abstract class GameLogic {
         }
 
         //create wave
-        if(waveStart && enemies.size() == 0){
+        if(waveStart && enemies.isEmpty()){
             Levels.createNewWave();
         }
     }
@@ -225,8 +216,8 @@ public abstract class GameLogic {
         }
         if(slowDownTimerDiff > slowDownLength){
             slowDownTimer = 0;
-            for(int j = 0;j < enemies.size();j++){
-                enemies.get(j).setSlow(false);
+            for (Enemy enemy : enemies) {
+                enemy.setSlow(false);
             }
         }
     }

@@ -15,6 +15,11 @@ import javax.swing.*;
     //при стрельбе мышкой снаряды сливаются
     //тип оружия добавить в enum вместо магических цифр
     //можно сделать замедление плюшек, нужно ли?
+    //добавить JOptionalPane при ошибках
+
+/**
+ * Class starts the game thread and displays a game window on the screen
+ */
 
 public class Game {
     public static GamePanel panel = new GamePanel();

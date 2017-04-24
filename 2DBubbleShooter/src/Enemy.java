@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 09.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * Class represents enemies and is responsible for rendering and change the state of enemies
+ */
 public class Enemy implements Mobile, Wounded {
     //FIELDS
 

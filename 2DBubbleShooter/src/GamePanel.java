@@ -6,6 +6,10 @@ import java.awt.image.BufferedImage;
  * Created by Artem Solomatin on 08.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * The class is responsible for drawing the game screen
+ */
 public class GamePanel extends JPanel implements Runnable {
 
     //FIELDS
@@ -34,10 +38,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static int getHEIGHT() {
         return HEIGHT;
-    }
-
-    public static boolean isPaused() {
-        return paused;
     }
 
     public static void setPaused(){

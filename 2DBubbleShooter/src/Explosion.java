@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 13.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * Class represents the explosion animation of the enemies when it collision with bullet
+ */
 public class Explosion implements Mobile {
 
     //FIELDS

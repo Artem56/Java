@@ -4,6 +4,10 @@ import java.awt.*;
  * Created by Artem Solomatin on 14.02.17.
  * 2DBubbleShooter
  */
+
+/**
+ * Class lists and description of all possible in-game enemies
+ */
 public abstract class EnemyTypes {
 
     public static void createEnemy(Enemy e){
