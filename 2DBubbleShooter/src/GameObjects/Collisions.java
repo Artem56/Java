@@ -1,7 +1,10 @@
-/**
+package GameObjects; /**
  * Created by Artem Solomatin on 14.02.17.
  * 2DBubbleShooter
  */
+
+import Core.GameLogic;
+import Utils.Levels;
 
 /**
  * The class is responsible for calculating collisions occurring in the game

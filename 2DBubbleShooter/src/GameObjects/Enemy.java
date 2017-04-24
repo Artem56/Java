@@ -1,3 +1,9 @@
+package GameObjects;
+
+import Core.GameLogic;
+import Core.GamePanel;
+import Utils.EnemyTypes;
+
 import java.awt.*;
 
 /**
@@ -111,7 +117,7 @@ public class Enemy implements Mobile, Wounded {
         return dead;
     }
 
-     void explode(){
+     public void explode(){
         if(size > 1){
             int amount = 2;
 
@@ -138,8 +144,8 @@ public class Enemy implements Mobile, Wounded {
         }
 
         /*if(!ready){
-            if(x > radius && x < GamePanel.WIDTH - radius &&
-                    y > radius && y < GamePanel.HEIGHT - radius){
+            if(x > radius && x < Core.GamePanel.WIDTH - radius &&
+                    y > radius && y < Core.GamePanel.HEIGHT - radius){
                 ready = true;
             }
         }*/

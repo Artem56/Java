@@ -1,3 +1,8 @@
+package GameObjects;
+
+import Core.GameLogic;
+import Core.GamePanel;
+
 import java.awt.*;
 
 /**
@@ -250,34 +255,34 @@ public class Player implements Mobile, Wounded {
 
 
                     /*if(powerLevel < 2){          //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
-                        GameLogic.bullets.add(new Bullet(angle, x, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle, x, y));
                     }else if(powerLevel < 3){
-                        GameLogic.bullets.add(new Bullet(angle, x + 5, y));
-                        GameLogic.bullets.add(new Bullet(angle, x - 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle, x + 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle, x - 5, y));
                     }
                     else if(powerLevel < 4){
-                        GameLogic.bullets.add(new Bullet(angle - 0.1, x - 5, y));
-                        GameLogic.bullets.add(new Bullet(angle, x, y));
-                        GameLogic.bullets.add(new Bullet(angle + 0.1, x + 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle - 0.1, x - 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle, x, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(angle + 0.1, x + 5, y));
                     }else if(powerLevel < 5){
-                        GameLogic.bullets.add(new Bullet(265, x - 5, y));
-                        GameLogic.bullets.add(new Bullet(265, x - 10, y));
-                        GameLogic.bullets.add(new Bullet(270, x, y));
-                        GameLogic.bullets.add(new Bullet(275, x + 5, y));
-                        GameLogic.bullets.add(new Bullet(275, x + 10, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(265, x - 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(265, x - 10, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(270, x, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(275, x + 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(275, x + 10, y));
                     }else if (powerLevel < 6) {
-                        GameLogic.bullets.add(new Bullet(270, 4, x + 5, y));
-                        GameLogic.bullets.add(new Bullet(270, 4, x - 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(270, 4, x + 5, y));
+                        Core.GameLogic.bullets.add(new GameObjects.Bullet(270, 4, x - 5, y));
                     } else if(powerLevel < 7) {
-                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
-                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
-                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(265, 4, x - 7, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(270, 4, x, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(275, 4, x + 7, y));
                 }else if(powerLevel < 8) {
-                    GameLogic.bullets.add(new Bullet(265, 4, x - 7, y));
-                    GameLogic.bullets.add(new Bullet(265, 4, x - 15, y));
-                    GameLogic.bullets.add(new Bullet(270, 4, x, y));
-                    GameLogic.bullets.add(new Bullet(275, 4, x + 7, y));
-                    GameLogic.bullets.add(new Bullet(275, 4, x + 15, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(265, 4, x - 7, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(265, 4, x - 15, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(270, 4, x, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(275, 4, x + 7, y));
+                    Core.GameLogic.bullets.add(new GameObjects.Bullet(275, 4, x + 15, y));
                 }*/
 
             }

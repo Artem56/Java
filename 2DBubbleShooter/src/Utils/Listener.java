@@ -1,3 +1,8 @@
+package Utils;
+
+import Core.GameLogic;
+import Core.GamePanel;
+
 import java.awt.event.*;
 
 /**
@@ -23,7 +28,7 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
                 break;
             case KeyEvent.VK_DOWN : GameLogic.player.setDown(true);
                 break;
-            /*case KeyEvent.VK_SPACE : GameLogic.player.setFiring(true);
+            /*case KeyEvent.VK_SPACE : Core.GameLogic.player.setFiring(true);
                 break;*/
         }
     }
@@ -39,7 +44,7 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
                 break;
             case KeyEvent.VK_DOWN : GameLogic.player.setDown(false);
                 break;
-            /*case KeyEvent.VK_SPACE : GameLogic.player.setFiring(false);
+            /*case KeyEvent.VK_SPACE : Core.GameLogic.player.setFiring(false);
                 break;*/
             case KeyEvent.VK_Q : GamePanel.setPaused();
                 break;

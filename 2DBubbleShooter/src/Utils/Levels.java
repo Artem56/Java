@@ -1,7 +1,10 @@
-/**
+package Utils; /**
  * Created by Artem Solomatin on 13.02.17.
  * 2DBubbleShooter
  */
+
+import Core.GameLogic;
+import GameObjects.Enemy;
 
 /**
  * The class contains the description of all the waves of enemies

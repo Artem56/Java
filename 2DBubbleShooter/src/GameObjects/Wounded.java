@@ -1,4 +1,4 @@
-/**
+package GameObjects; /**
  * Created by Artem Solomatin on 13.02.17.
  * 2DBubbleShooter
  */

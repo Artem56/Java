@@ -1,3 +1,7 @@
+package GameObjects;
+
+import Core.GamePanel;
+
 import java.awt.*;
 
 /**

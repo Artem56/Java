@@ -1,3 +1,7 @@
+package Utils;
+
+import GameObjects.Enemy;
+
 import java.awt.*;
 
 /**

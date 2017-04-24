@@ -1,8 +1,12 @@
+package Core;
+
+import GameObjects.*;
+import Utils.Saver;
+import Utils.Levels;
+
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.TreeSet;
+
 
 /**
  * Created by Artem Solomatin on 16.02.17.

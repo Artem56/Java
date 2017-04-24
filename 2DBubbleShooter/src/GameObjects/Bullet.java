@@ -1,3 +1,7 @@
+package GameObjects;
+
+import Core.GamePanel;
+
 import java.awt.*;
 
 /**
@@ -6,7 +10,7 @@ import java.awt.*;
  */
 
 /**
- * Class Bullet represents the bullet and is responsible for drawing and changing the state of bullets
+ * Class GameObjects.Bullet represents the bullet and is responsible for drawing and changing the state of bullets
  */
 public class Bullet implements Mobile {
 
@@ -32,8 +36,8 @@ public class Bullet implements Mobile {
         this.y = y;
         radius = 2;
 
-        /*distX = GameLogic.player.getMouseX() - GameLogic.player.getX();
-        distY = GameLogic.player.getMouseY() - GameLogic.player.getY();
+        /*distX = Core.GameLogic.player.getMouseX() - Core.GameLogic.player.getX();
+        distY = Core.GameLogic.player.getMouseY() - Core.GameLogic.player.getY();
         dist = Math.sqrt(distX * distX + distY * distY);*/       //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
 
         radians = Math.toRadians(angle);

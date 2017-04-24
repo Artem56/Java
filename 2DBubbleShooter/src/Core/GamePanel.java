@@ -1,3 +1,9 @@
+package Core;
+
+import GameObjects.Collisions;
+import Utils.Levels;
+import Utils.Listener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -244,7 +250,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         //paused
         if(paused) {
-            String sPause = "Game is paused";
+            String sPause = "Core.Game is paused";
             g.setColor(Color.white);
             g.setFont(new Font("Areal", Font.PLAIN, 28));
             g.drawString(sPause, (WIDTH - length) / 2, 100);
