@@ -1,5 +1,11 @@
-1 - add one hp
 q - pause
+
+First player(white):
+1 - add one hp
 arrows - control
 LMB - fire
+
+Second player(black):
+WSAD - control
+Space - fire
 
