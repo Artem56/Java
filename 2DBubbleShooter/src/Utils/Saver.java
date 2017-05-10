@@ -22,10 +22,17 @@ public class Saver implements Serializable {
     private String name;
     private int score;
 
-    private final static String fileName = "liderboard.ser";
+    private transient static final String fileName = "liderboard.ser";
 
 
     //CONSTRUCTOR
+
+    /**
+     * Constructor of the class
+     *
+     * @param name   name of the winner
+     * @param score  score of the winner
+     */
     public Saver(String name, int score){
         this.name = name;
         this.score = score;
@@ -33,6 +40,14 @@ public class Saver implements Serializable {
 
 
     //METHODS
+    public static String getFileName() {
+        return fileName;
+    }
+
+    /*public static void setFileName(String fileName) {
+        Saver.fileName = fileName;
+    }*/
+
     public String getName() {
         return name;
     }
@@ -49,11 +64,19 @@ public class Saver implements Serializable {
         this.score = score;
     }
 
-    public static void serData(ArrayList<Saver> profiles){
+    /**
+     * Serialization of data from the best player
+     *
+     * @param profiles  data of the best player
+     */
+     public static void serData(ArrayList<Saver> profiles){
         try(FileOutputStream fileOut = new FileOutputStream(fileName);
+
         ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(profiles);
-        } catch (FileNotFoundException e) {
+        }
+
+        catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Файл для сохранения не найден");
             System.exit(1);
         } catch (IOException e) {
@@ -62,18 +85,23 @@ public class Saver implements Serializable {
         }
     }
 
+    /**
+     * Deserialization of the player's data
+     *
+     * @return List of profiles
+     */
     public static ArrayList<Saver> deserData(){
         ArrayList<Saver> retSaver = null;
         try(FileInputStream fileIn = new FileInputStream(fileName); ObjectInputStream in = new ObjectInputStream(fileIn)) {
             retSaver = (ArrayList<Saver>) in.readObject();
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Файл для сохранения не найден");
+            JOptionPane.showMessageDialog(null, "Файл сохранения не найден");
             System.exit(1);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Ошибка ввода/вывода");
             System.exit(2);
         } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Ошибка чиенмя класса");
+            JOptionPane.showMessageDialog(null, "Ошибка чтения класса");
             System.exit(3);
         }
         return retSaver;

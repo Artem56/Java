@@ -20,15 +20,25 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
     @Override
     public void keyPressed(KeyEvent e){
         switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(true);
+            case KeyEvent.VK_LEFT : GameLogic.players.get(0).setLeft(true);
                 break;
-            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(true);
+            case KeyEvent.VK_RIGHT : GameLogic.players.get(0).setRight(true);
                 break;
-            case KeyEvent.VK_UP : GameLogic.player.setUp(true);
+            case KeyEvent.VK_UP : GameLogic.players.get(0).setUp(true);
                 break;
-            case KeyEvent.VK_DOWN : GameLogic.player.setDown(true);
+            case KeyEvent.VK_DOWN : GameLogic.players.get(0).setDown(true);
                 break;
-            /*case KeyEvent.VK_SPACE : Core.GameLogic.player.setFiring(true);
+            case KeyEvent.VK_A : GameLogic.players.get(1).setLeft(true);
+                break;
+            case KeyEvent.VK_D : GameLogic.players.get(1).setRight(true);
+                break;
+            case KeyEvent.VK_W : GameLogic.players.get(1).setUp(true);
+                break;
+            case KeyEvent.VK_S : GameLogic.players.get(1).setDown(true);
+                break;
+            case KeyEvent.VK_SPACE : GameLogic.players.get(1).setFiring(true);
+                break;
+            /*case KeyEvent.VK_SPACE : GameLogic.players.get(0).setFiring(true);
                 break;*/
         }
     }
@@ -36,19 +46,29 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT : GameLogic.player.setLeft(false);
+            case KeyEvent.VK_LEFT : GameLogic.players.get(0).setLeft(false);
                 break;
-            case KeyEvent.VK_RIGHT : GameLogic.player.setRight(false);
+            case KeyEvent.VK_RIGHT : GameLogic.players.get(0).setRight(false);
                 break;
-            case KeyEvent.VK_UP : GameLogic.player.setUp(false);
+            case KeyEvent.VK_UP : GameLogic.players.get(0).setUp(false);
                 break;
-            case KeyEvent.VK_DOWN : GameLogic.player.setDown(false);
+            case KeyEvent.VK_DOWN : GameLogic.players.get(0).setDown(false);
+                break;
+            case KeyEvent.VK_A : GameLogic.players.get(1).setLeft(false);
+                break;
+            case KeyEvent.VK_D : GameLogic.players.get(1).setRight(false);
+                break;
+            case KeyEvent.VK_W : GameLogic.players.get(1).setUp(false);
+                break;
+            case KeyEvent.VK_S : GameLogic.players.get(1).setDown(false);
+                break;
+            case KeyEvent.VK_SPACE : GameLogic.players.get(1).setFiring(false);
                 break;
             /*case KeyEvent.VK_SPACE : Core.GameLogic.player.setFiring(false);
                 break;*/
             case KeyEvent.VK_Q : GamePanel.setPaused();
                 break;
-            case KeyEvent.VK_1 : GameLogic.player.addLive();
+            case KeyEvent.VK_1 : GameLogic.players.get(0).addLive();
                 break;
         }
     }
@@ -61,7 +81,9 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
     @Override
     public void mousePressed(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1){
-            GameLogic.player.setFiring(true);
+            //System.out.println("size:  " + GameLogic.players.size());
+            GameLogic.players.get(0).setFiring(true);
+            
         }
 
     }
@@ -69,7 +91,7 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
     @Override
     public void mouseReleased(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1){
-            GameLogic.player.setFiring(false);
+            GameLogic.players.get(0).setFiring(false);
         }
     }
 
@@ -85,14 +107,14 @@ public class Listener implements KeyListener, MouseMotionListener, MouseListener
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        GameLogic.player.setMouseX(e.getX());
-        GameLogic.player.setMouseY(e.getY());
+        /*GameLogic.players.get(0).setMouseX(e.getX());
+        GameLogic.players.get(0).setMouseY(e.getY());*/
 
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        GameLogic.player.setMouseX(e.getX());
-        GameLogic.player.setMouseY(e.getY());
+        /*GameLogic.players.get(0).setMouseX(e.getX());
+        GameLogic.players.get(0).setMouseY(e.getY());*/
     }
 }
