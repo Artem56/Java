@@ -1,19 +1,18 @@
 package Core;
 
 import GameObjects.*;
-import Utils.Saver;
 import Utils.Levels;
+import Utils.Saver;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 
 /**
  * Created by Artem Solomatin on 16.02.17.
  * 2DBubbleShooter
- */
-
-/**
+ *
  * the class contains the game loop and is responsible for the creation of new waves, updating the game screen, cutting out bonuses from dead enemies, and starting a saving at the end
  */
 public abstract class GameLogic {
@@ -32,7 +31,8 @@ public abstract class GameLogic {
 
     private static boolean running;
 
-    public static Player player;
+    //public static Player player;
+    public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<Bullet> bullets = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<PowerUp> powerUps = new ArrayList<>();
@@ -46,7 +46,11 @@ public abstract class GameLogic {
         running = b;
     }
 
-    public static void gameLoop(){
+    /**
+     * The main game loop project
+     */
+
+    static void gameLoop(){
         gameStartTime = System.currentTimeMillis();
 
         long startTime;                //ns
@@ -54,7 +58,11 @@ public abstract class GameLogic {
         long waitTime;                 //ms
         long targetTime = 1000/FPS;    //ms
 
-        player = new Player();
+        if(players.size() <= 3) {
+            players.add(new Player(Color.white, 0));
+            players.add(new Player(Color.black, 1));
+        }
+        //player = new Player();
         //gameStartTime = System.currentTimeMillis();
 
         while(running){
@@ -63,7 +71,8 @@ public abstract class GameLogic {
 
             Game.panel.gameUpdate();        //update all of the game logic
             Game.panel.gameRender();        //draws the game on a back buffer
-            Game.panel.gameDraw();          //put the buffer on the screen
+            //Game.panel.gameDraw();          //put the buffer on the screen
+            Game.panel.repaint();
 
             loopTime = (System.nanoTime() - startTime) / 1000_000;
             waitTime = (targetTime - loopTime);
@@ -76,16 +85,30 @@ public abstract class GameLogic {
                 e.printStackTrace();
             }
         }
-
     }
+
+    /**
+     * Save results of the best player
+     */
 
     public static void saveResult() {
         //сохранение
         profiles = Saver.deserData();
 
-        String name = JOptionPane.showInputDialog(null, "Введите ваше имя\n" +
-                "для сохранения результата");
-        Saver profile = new Saver(name, player.getScore());
+        Saver profile = null;
+        for(Player pl : players) {
+            if(!pl.isLost()) {
+                String name = JOptionPane.showInputDialog(null, "Игрок " + (pl.getNumber() + 1) + " введите ваше имя\n" +
+                    "для сохранения результата");
+                profile = new Saver(name, pl.getScore());
+                break;
+            }
+        }
+
+        if(profile == null){
+            JOptionPane.showMessageDialog(null, "Нечего сохранять");
+            return;
+        }
         if(profile.getName() != null && profile.getScore() != 0) {
 
             //проверка на одинаковые имена
@@ -114,6 +137,10 @@ public abstract class GameLogic {
         Saver.draw(GamePanel.g);
     }
 
+    /**
+     * The creation of a new wave
+     */
+
     public static void wave(){
         if(waveStartTimer == 0 && enemies.isEmpty()){
             Levels.addWaveNumber();
@@ -133,9 +160,19 @@ public abstract class GameLogic {
         }
     }
 
+    /**
+     * Updating the states of all mobile objects
+     */
+
     public static void mobileUpdate(){
         //player update
-        player.update();
+        for(int i = 0;i < players.size(); i++){
+            boolean remove = players.get(i).update();
+            if(remove){
+                players.remove(i);
+                i--;
+            }
+        }
 
         //bullets update
         for(int i = 0; i < bullets.size(); i++) {
@@ -179,6 +216,10 @@ public abstract class GameLogic {
         }
     }
 
+    /**
+     * Update all dead objects
+     */
+
     public static void deadUpdate(){
         //dead enemies
         for(int j = 0;j < enemies.size();j++){
@@ -199,8 +240,9 @@ public abstract class GameLogic {
                     powerUps.add(new PowerUp(2, dead.getX(), dead.getY()));
                 }
 
-                player.addScore(dead.getCost());
-                enemies.remove(j);
+                //player.addScore(dead.getCost());                             //СЧЕТ
+                dead.getKillerNumber().addScore(dead.getCost());
+                enemies.remove(dead);
                 j--;
 
                 dead.explode();
@@ -208,9 +250,12 @@ public abstract class GameLogic {
             }
         }
 
-        //is player dead?
-        if(player.isDead()){
-            running = false;
+        //is players dead?
+        for(Player player : players) {
+            if (player.isDead()) {
+                player.setLost(true);
+                running = false;
+            }
         }
     }
 
