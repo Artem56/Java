@@ -1,15 +1,13 @@
 package GameObjects;
 
-import Core.GamePanel;
+import Core.*;
 
 import java.awt.*;
 
 /**
  * Created by Artem Solomatin on 09.02.17.
  * 2DBubbleShooter
- */
-
-/**
+ *
  * Class GameObjects.Bullet represents the bullet and is responsible for drawing and changing the state of bullets
  */
 public class Bullet implements Mobile {
@@ -17,10 +15,9 @@ public class Bullet implements Mobile {
     //FIELDS
     private double x;
     private double y;
-
-
     private int radius;
 
+    private final Player owner;
     private double radians;
     private final int speed = 10;
     private final Color color1 = Color.yellow;
@@ -30,8 +27,17 @@ public class Bullet implements Mobile {
     private double dist;
 
     //CONSTRUCTOR
-
-    public Bullet(double angle, double x, double y){
+    /**
+     * Class constructor
+     */
+    public Bullet(double angle, double x, double y, Player owner){
+        if(owner == null){
+            throw new NullPointerException();
+        }
+        if(x < owner.getRadius() || y < owner.getRadius() || x > GamePanel.getWIDTH() - owner.getRadius() || y > GamePanel.getHEIGHT() - owner.getRadius()){
+            throw new IllegalArgumentException();
+        }
+        this.owner = owner;
         this.x = x;
         this.y = y;
         radius = 2;
@@ -44,7 +50,11 @@ public class Bullet implements Mobile {
         //radians = angle;           //ДЛЯ СТРЕЛЬБЫ МЫШКОЙ
     }
 
-    public Bullet(double angle, int radius, double x, double y){
+    /**
+     * Class constructor
+     */
+    public Bullet(double angle, int radius, double x, double y, Player owner){
+        this.owner = owner;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -66,7 +76,16 @@ public class Bullet implements Mobile {
         return radius;
     }
 
-    public boolean update(){     //false means everything OK, otherwise we should delete the bullet
+    public Player getOwner() {
+        return owner;
+    }
+
+    /**
+     * Update all bullets in game
+     *
+     * @return false means everything OK, otherwise we should delete the bullet
+     */
+    public boolean update(){
         x += Math.cos(radians) * speed;
         y += Math.sin(radians) * speed;
 
@@ -74,11 +93,8 @@ public class Bullet implements Mobile {
         y +=  distY/dist * speed;*/
 
 
-        if(x < -radius || x > GamePanel.getWIDTH() + radius || y < -radius || y > GamePanel.getHEIGHT() + radius){
-            return true;
-        }
+        return x < -radius || x > GamePanel.getWIDTH() + radius || y < -radius || y > GamePanel.getHEIGHT() + radius;
 
-        return false;
     }
 
     public void draw(Graphics2D g){

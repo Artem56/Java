@@ -24,15 +24,16 @@ public class Enemy implements Mobile, Wounded {
     private double dy;
 
     private double radians;
-    public double speed;
-    public int health;
-    public int cost;
+    private double speed;
+    private int health;
+    private int cost;
 
-    public int type;
-    public int size;
+    private int type;
+    private int size;
 
     public Color color1;
     private final Color color2 = Color.white;
+    private Player killerNumber;
 
     private boolean dead;
     private boolean slow;
@@ -43,7 +44,11 @@ public class Enemy implements Mobile, Wounded {
 
 
     //CONSTRUCTOR
+    /**
+     * Class constructor
+     */
     public Enemy(int type, int size){
+        //System.out.println("type: " + type + " size " + size);
         this.type = type;
         this.size = size;
 
@@ -83,6 +88,30 @@ public class Enemy implements Mobile, Wounded {
         this.radius = radius;
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setColor1(Color color1) {
+        this.color1 = color1;
+    }
+
     public int getCost(){
         return cost;
     }
@@ -95,12 +124,32 @@ public class Enemy implements Mobile, Wounded {
         return size;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public Color getColor1() {
+        return color1;
+    }
+
     public boolean isSlow() {
         return slow;
     }
 
     public void setSlow(boolean slow) {
         this.slow = slow;
+    }
+
+    public Player getKillerNumber() {
+        return killerNumber;
+    }
+
+    public void setKillerNumber(Player killerNumber) {
+        this.killerNumber = killerNumber;
     }
 
     public void hit(int radius){
@@ -117,6 +166,9 @@ public class Enemy implements Mobile, Wounded {
         return dead;
     }
 
+    /**
+     * The division of the enemy for several
+     */
      public void explode(){
         if(size > 1){
             int amount = 2;
@@ -134,6 +186,11 @@ public class Enemy implements Mobile, Wounded {
         }
     }
 
+    /**
+     * Update all enemies in game
+     *
+     * @return false means everything OK, otherwise we should delete the enemy
+     */
     public boolean update(){
         if(slow) {
             x += dx * 0.3;

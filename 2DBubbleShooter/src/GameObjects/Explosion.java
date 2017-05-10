@@ -21,6 +21,9 @@ public class Explosion implements Mobile {
     private final double speed = 1.5;
 
     //CONSTRUCTOR
+    /**
+     * Class constructor
+     */
     public Explosion(double x, double y, int radius, int maxRadius) {
         this.x = x;
         this.y = y;
@@ -41,6 +44,11 @@ public class Explosion implements Mobile {
         return radius;
     }
 
+    /**
+     * Update all explosions in game
+     *
+     * @return false means everything OK, otherwise we should delete the circle of explosion
+     */
     public boolean update(){
         radius += speed;
         return radius >= maxRadius;

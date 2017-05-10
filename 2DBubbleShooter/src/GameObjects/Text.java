@@ -21,6 +21,9 @@ public class Text implements Mobile {
     private String s;
 
     //CONSTRUCTOR
+    /**
+     * Class constructor
+     */
     public Text(double x, double y, String s) {
         this.x = x;
         this.y = y;
@@ -38,14 +41,16 @@ public class Text implements Mobile {
         return y;
     }
 
-    public int getRadius(){return 0;};
+    public int getRadius(){return 0;}
 
+    /**
+     * Update all texts in game
+     *
+     * @return false means everything OK, otherwise we should delete the text
+     */
     public boolean update(){
         long elapsed = (System.nanoTime() - startTime) / 1000_000;   //ms
-        if(elapsed >= time){
-            return true;
-        }
-        return false;
+        return elapsed >= time;
     }
 
     public void draw(Graphics2D g){
@@ -64,5 +69,4 @@ public class Text implements Mobile {
         g.drawString(s, (int)x, (int)y);
 
     }
-
 }
